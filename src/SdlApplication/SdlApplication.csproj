@@ -86,5 +86,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Clipping2D\Clipping2D.csproj">
+      <Project>{5f7dcb80-d47d-4b7e-a6b1-b4d21a9ab5de}</Project>
+      <Name>Clipping2D</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
