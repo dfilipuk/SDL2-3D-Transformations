@@ -6,12 +6,12 @@ namespace Open3D.Math
     {
         private const int _rowsDemensionNumber = 0;
         private const int _columnsDemensionNumber = 1;
-        private readonly int[,] _values;
+        private readonly double[,] _values;
 
         public int RowsCount => _values.GetLength(_rowsDemensionNumber);
         public int ColumnsCount => _values.GetLength(_columnsDemensionNumber);
 
-        public int this[int i, int j]
+        public double this[int i, int j]
         {
             get => _values[i, j];
             set => _values[i, j] = value;
@@ -19,7 +19,7 @@ namespace Open3D.Math
 
         public Matrix(int rows, int columns)
         {
-            _values = new int[rows, columns];
+            _values = new double[rows, columns];
         }
 
         public Matrix MultiplyBy(Matrix matrix)
@@ -35,7 +35,7 @@ namespace Open3D.Math
             {
                 for (int j = 0; j < result.ColumnsCount; j++)
                 {
-                    int item = 0;
+                    double item = 0;
 
                     for (int k = 0; k < ColumnsCount; k++)
                     {

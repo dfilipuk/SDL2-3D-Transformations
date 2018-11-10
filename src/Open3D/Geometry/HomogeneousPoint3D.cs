@@ -7,13 +7,13 @@ namespace Open3D.Geometry
     {
         private Matrix _pointMatrix;
 
-        public int X => _pointMatrix[0, 0];
-        public int Y => _pointMatrix[1, 0];
-        public int Z => _pointMatrix[2, 0];
-        public int W => _pointMatrix[3, 0];
+        public double X => _pointMatrix[0, 0];
+        public double Y => _pointMatrix[1, 0];
+        public double Z => _pointMatrix[2, 0];
+        public double W => _pointMatrix[3, 0];
         public Point Projection { get; private set; }
 
-        public HomogeneousPoint3D(int x, int y, int z, int w)
+        public HomogeneousPoint3D(double x, double y, double z, double w)
         {
             _pointMatrix = new Matrix(4, 1)
             {
@@ -29,7 +29,7 @@ namespace Open3D.Geometry
             _pointMatrix = affineMatrix.MultiplyBy(_pointMatrix);
         }
 
-        public void Project(double d, int centerX, int centerY)
+        public void Project(int d, int centerX, int centerY)
         {
             Projection = new Point()
             {

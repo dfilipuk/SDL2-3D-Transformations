@@ -5,10 +5,11 @@ namespace Open3D.Geometry.Polyhedron
 {
     public class SimplePolyhedron3D : IPolyhedron3D
     {
-        private readonly HomogeneousPoint3D _rotationCenter;
         private readonly IList<HomogeneousPoint3D> _vertexes;
         private readonly List<Polygon3D> _facets;
         private readonly List<Polygon3D> _visibleFacets;
+
+        public HomogeneousPoint3D RotationCenter { get; private set; }
 
         public IEnumerable<Polygon3D> VisibleFacets
         {
@@ -24,15 +25,16 @@ namespace Open3D.Geometry.Polyhedron
         public SimplePolyhedron3D(HomogeneousPoint3D rotationCenter, IList<HomogeneousPoint3D> vertexes, 
             IEnumerable<IEnumerable<int>> facetVertexes)
         {
+            RotationCenter = rotationCenter;
             _vertexes = vertexes;
             _facets = new List<Polygon3D>();
-            _rotationCenter = rotationCenter;
+            _visibleFacets = new List<Polygon3D>();
             CreateFacets(facetVertexes);
         }
 
         public void Transform(Matrix affineMatrix)
         {
-            _rotationCenter.Transform(affineMatrix);
+            RotationCenter.Transform(affineMatrix);
 
             foreach (var vertex in _vertexes)
             {
@@ -40,7 +42,7 @@ namespace Open3D.Geometry.Polyhedron
             }
         }
 
-        public void ProjectVertexesToScreen(double distanceBetweenScreenAndObserver, int screenCenterX, int screenCenterY)
+        public void ProjectVertexesToScreen(int distanceBetweenScreenAndObserver, int screenCenterX, int screenCenterY)
         {
             foreach (var vertex in _vertexes)
             {
