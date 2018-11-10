@@ -11,8 +11,6 @@ namespace Clipping2D.Polygon
     {
         private readonly double _precision = 0.00001;
 
-        private IPolygonDrawer _polygonDrawer;
-
         protected List<Edge2D> _edges;
         protected List<Point> _initialVertexes;
         protected Dictionary<int, List<double>> _normalInsideVectors;
@@ -28,19 +26,18 @@ namespace Clipping2D.Polygon
             }
         }
 
-        public Polygon2D(List<Point> vertexes, IPolygonDrawer polygonDrawer)
+        public Polygon2D(List<Point> vertexes)
         {
             _initialVertexes = vertexes;
             _normalInsideVectors = new Dictionary<int, List<double>>();
             _edges = new List<Edge2D>();
-            _polygonDrawer = polygonDrawer;
 
             CalculateInitialEdges();
         }
 
-        public void Draw(IntPtr renderer)
+        public void Draw(IntPtr renderer, IPolygonDrawer polygonDrawer)
         {
-            _polygonDrawer.Draw(renderer, _edges);
+            polygonDrawer.Draw(renderer, _edges);
         }
 
         public void ResetClipping()

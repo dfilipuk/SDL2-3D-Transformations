@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SdlApplication.Math
+namespace Open3D.Math
 {
     public class Matrix
     {
