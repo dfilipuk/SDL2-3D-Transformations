@@ -12,7 +12,7 @@ namespace Open3D.Rendering
         private readonly HomogeneousPoint3D _observerInitialPosition;
         private readonly IPolyhedron3D _polyhedron;
         private readonly AffineTransformationBuilder _affineTransformationBuilder;
-        private readonly int _distanceBetweenScreenAndObserver;
+        private int _distanceBetweenScreenAndObserver;
 
         public SingleObjectScene(HomogeneousPoint3D observer, IPolyhedron3D polyhedron, int distanceBetweenScreenAndObserver)
         {
@@ -27,6 +27,18 @@ namespace Open3D.Rendering
         {
             Matrix affineMatrix = _affineTransformationBuilder.MoveOriginTo(_observerInitialPosition);
             _polyhedron.Transform(affineMatrix);
+        }
+
+        /// <inheritdoc />
+        public void MoveObserverTo(HomogeneousPoint3D point)
+        {
+            Matrix affineMatrix = _affineTransformationBuilder.MoveOriginTo(point);
+            _polyhedron.Transform(affineMatrix);
+        }
+
+        public void MoveDisplay(int moveDistance)
+        {
+            _distanceBetweenScreenAndObserver += moveDistance;
         }
 
         public void RotateAroundAxis(Axis3D axis, double angle)

@@ -45,8 +45,12 @@
     <Compile Include="Geometry\Polygon3D.cs" />
     <Compile Include="Geometry\Polyhedron\IPolyhedron3D.cs" />
     <Compile Include="Geometry\Polyhedron\SimplePolyhedron3D.cs" />
+    <Compile Include="Math\AffineTransformationBuilder.cs" />
+    <Compile Include="Math\Axis3D.cs" />
     <Compile Include="Math\Matrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rendering\IScene.cs" />
+    <Compile Include="Rendering\SingleObjectScene.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Clipping2D\Clipping2D.csproj">
@@ -54,5 +58,6 @@
       <Name>Clipping2D</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

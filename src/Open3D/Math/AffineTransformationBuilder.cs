@@ -8,9 +8,9 @@ namespace Open3D.Math
         public Matrix MoveOriginTo(HomogeneousPoint3D point)
         {
             Matrix result = GetZeroMatrix();
-            result[0, 3] = point.X;
-            result[1, 3] = point.Y;
-            result[2, 3] = point.Z;
+            result[0, 3] = -point.X;
+            result[1, 3] = -point.Y;
+            result[2, 3] = -point.Z;
 
             return result;
         }
@@ -70,7 +70,7 @@ namespace Open3D.Math
                     throw new ArgumentException("Unknown axis");
             }
 
-            return moveOriginToPoint.MultiplyBy(rotationMatrix).MultiplyBy(returnOrigin);
+            return returnOrigin.MultiplyBy(rotationMatrix.MultiplyBy(moveOriginToPoint));
         }
 
         public Matrix GetZeroMatrix()

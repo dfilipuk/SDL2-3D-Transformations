@@ -12,7 +12,7 @@ namespace SdlApplication.Drawer
         {
             foreach (Edge2D edge in edges)
             {
-                SDL.SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+                SDL.SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
 
                 foreach (var line in edge.VisibleParts)
                 {

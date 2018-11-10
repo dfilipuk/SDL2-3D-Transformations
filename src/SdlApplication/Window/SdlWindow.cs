@@ -1,5 +1,12 @@
 ﻿using System;
+using System.Drawing;
 using System.Threading;
+using Clipping2D.Drawer;
+using Open3D.Geometry;
+using Open3D.Geometry.Polyhedron;
+using Open3D.Math;
+using Open3D.Rendering;
+using SdlApplication.Drawer;
 using SDL2;
 
 namespace SdlApplication.Window
@@ -7,6 +14,9 @@ namespace SdlApplication.Window
     public class SdlWindow
     {
         private readonly int _renderLoopTimeoutMs = 10;
+        private readonly double _rotationAngle = Math.PI / 90;
+        private readonly int _observerMoveStep = 10;
+        private readonly int _displayMoveStep = 10;
 
         private readonly int _screenWidth;
         private readonly int _screenHeight;
@@ -15,11 +25,43 @@ namespace SdlApplication.Window
         private IntPtr _renderer;
         private IntPtr _window;
 
+        private IScene _scene;
+        private IPolygonDrawer _polygonDrawer;
+
         public SdlWindow(string title, int screenWidth, int screenHeight)
         {
             _title = title;
             _screenHeight = screenHeight;
             _screenWidth = screenWidth;
+            _polygonDrawer = new PolygonDrawer();
+        }
+
+        private void InitializeScene()
+        {
+            var polyhedron = new SimplePolyhedron3D(
+                new HomogeneousPoint3D(0, 0, 0, 1),
+                new []
+                {
+                    new HomogeneousPoint3D(-100, -100, -100, 1),
+                    new HomogeneousPoint3D(-100, -100, 100, 1),
+                    new HomogeneousPoint3D(100, -100, 100, 1),
+                    new HomogeneousPoint3D(100, -100, -100, 1),
+                    new HomogeneousPoint3D(-100, 100, -100, 1),
+                    new HomogeneousPoint3D(-100, 100, 100, 1),
+                    new HomogeneousPoint3D(100, 100, 100, 1),
+                    new HomogeneousPoint3D(100, 100, -100, 1),
+                },
+                new []
+                {
+                    new [] { 0, 1, 2, 3 },
+                    new [] { 4, 5, 6, 7 },
+                    new [] { 0, 1, 5, 4 },
+                    new [] { 7, 6, 2, 3 },
+                    new [] { 0, 3, 7, 4 },
+                    new [] { 1, 2, 6, 5 },
+                });
+            _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -500, 1), polyhedron, 450);
+            _scene.Initialize();
         }
 
         public void Open()
@@ -31,6 +73,7 @@ namespace SdlApplication.Window
                     _screenWidth, _screenHeight, SDL.SDL_WindowFlags.SDL_WINDOW_RESIZABLE);
                 _renderer = SDL.SDL_CreateRenderer(_window, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED);
 
+                InitializeScene();
                 WindowProcedure();
 
                 SDL.SDL_DestroyRenderer(_renderer);
@@ -60,30 +103,53 @@ namespace SdlApplication.Window
                         var key = sdlEvent.key;
                         switch (key.keysym.sym)
                         {
-                            case SDL.SDL_Keycode.SDLK_DOWN:
-                                // do smth
+                            case SDL.SDL_Keycode.SDLK_w:
+                                _scene.RotateAroundAxis(Axis3D.OX, -_rotationAngle);
                                 break;
-                            case SDL.SDL_Keycode.SDLK_UP:
-                                // do smth
+                            case SDL.SDL_Keycode.SDLK_s:
+                                _scene.RotateAroundAxis(Axis3D.OX, _rotationAngle);
                                 break;
-                        }
-                        break;
-                    }
-                    case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
-                    {
-                        if (sdlEvent.button.button == SDL.SDL_BUTTON_LEFT)
-                        {
-                            // do smth
-                        }
-                        else
-                        if (sdlEvent.button.button == SDL.SDL_BUTTON_RIGHT)
-                        {
-                            // do smth
-                        }
+                            case SDL.SDL_Keycode.SDLK_a:
+                                _scene.RotateAroundAxis(Axis3D.OY, _rotationAngle);
+                                break;
+                            case SDL.SDL_Keycode.SDLK_d:
+                                _scene.RotateAroundAxis(Axis3D.OY, -_rotationAngle);
+                                break;
+                            case SDL.SDL_Keycode.SDLK_q:
+                                _scene.RotateAroundAxis(Axis3D.OZ, -_rotationAngle);
+                                break;
+                            case SDL.SDL_Keycode.SDLK_e:
+                                _scene.RotateAroundAxis(Axis3D.OZ, _rotationAngle);
+                                break;
+                            case SDL.SDL_Keycode.SDLK_r:
+                                _scene.MoveObserverTo(new HomogeneousPoint3D(0, 0, _observerMoveStep, 1));
+                                break;
+                            case SDL.SDL_Keycode.SDLK_f:
+                                _scene.MoveObserverTo(new HomogeneousPoint3D(0, 0, -_observerMoveStep, 1));
+                                break;
+                            case SDL.SDL_Keycode.SDLK_KP_8:
+                                _scene.MoveObserverTo(new HomogeneousPoint3D(0, _observerMoveStep, 0, 1));
+                                break;
+                            case SDL.SDL_Keycode.SDLK_KP_2:
+                                _scene.MoveObserverTo(new HomogeneousPoint3D(0, -_observerMoveStep, 0, 1));
+                                break;
+                            case SDL.SDL_Keycode.SDLK_KP_6:
+                                _scene.MoveObserverTo(new HomogeneousPoint3D(-_observerMoveStep, 0, 0, 1));
+                                break;
+                            case SDL.SDL_Keycode.SDLK_KP_4:
+                                _scene.MoveObserverTo(new HomogeneousPoint3D(_observerMoveStep, 0, 0, 1));
+                                break;
+                                case SDL.SDL_Keycode.SDLK_t:
+                                _scene.MoveDisplay(_displayMoveStep);
+                                break;
+                            case SDL.SDL_Keycode.SDLK_g:
+                                _scene.MoveDisplay(-_displayMoveStep);
+                                break;
+                            }
                         break;
                     }
                 }
-                DrawSircle();
+                RenderScene();
                 Thread.Sleep(_renderLoopTimeoutMs);
             }
         }
@@ -93,7 +159,7 @@ namespace SdlApplication.Window
         //  где R: от 00 до FF
         //      G: от 00 до FF
         //      B: от 00 до FF 
-        private void DrawSircle()
+        private void RenderScene()
         {
             SDL.SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
             SDL.SDL_RenderClear(_renderer);
@@ -102,7 +168,13 @@ namespace SdlApplication.Window
             int width, height;
             SDL.SDL_GetWindowSize(_window, out width, out height);
 
-            SDL.SDL_RenderDrawPoint(_renderer, width / 2, height / 2);
+            var screenCenter = new Point
+            {
+                X = -width / 2,
+                Y = -height / 2
+            };
+
+            _scene.Render(_renderer, _polygonDrawer, screenCenter);
 
             SDL.SDL_RenderPresent(_renderer);
         }
