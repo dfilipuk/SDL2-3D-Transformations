@@ -29,12 +29,12 @@ namespace Open3D.Geometry
             _pointMatrix = affineMatrix.MultiplyBy(_pointMatrix);
         }
 
-        public void Project(int d, int centerX, int centerY)
+        public void Project(int d, Point center)
         {
             Projection = new Point()
             {
-                X = (int) System.Math.Round(X / (Z / d)) - centerX,
-                Y = (int) System.Math.Round(Y / (Z / d)) - centerY
+                X = (int) System.Math.Round(X / (Z / d)) - center.X,
+                Y = (int) System.Math.Round(Y / (Z / d)) - center.Y
             };
         }
     }

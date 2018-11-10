@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using Open3D.Math;
 
 namespace Open3D.Geometry.Polyhedron
@@ -9,7 +10,7 @@ namespace Open3D.Geometry.Polyhedron
         private readonly List<Polygon3D> _facets;
         private readonly List<Polygon3D> _visibleFacets;
 
-        public HomogeneousPoint3D RotationCenter { get; private set; }
+        public HomogeneousPoint3D RotationCenter { get; }
 
         public IEnumerable<Polygon3D> VisibleFacets
         {
@@ -42,11 +43,11 @@ namespace Open3D.Geometry.Polyhedron
             }
         }
 
-        public void ProjectVertexesToScreen(int distanceBetweenScreenAndObserver, int screenCenterX, int screenCenterY)
+        public void ProjectVertexesToScreen(int distanceBetweenScreenAndObserver, Point screenCenter)
         {
             foreach (var vertex in _vertexes)
             {
-                vertex.Project(distanceBetweenScreenAndObserver, screenCenterX, screenCenterY);
+                vertex.Project(distanceBetweenScreenAndObserver, screenCenter);
             }
         }
 
