@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Threading;
-using Clipping2D.Drawer;
 using Open3D.Geometry;
 using Open3D.Geometry.Factory;
 using Open3D.Geometry.Polyhedron;
@@ -14,6 +13,8 @@ namespace SdlApplication.Window
 {
     public class SdlWindow
     {
+        private const bool NotVisibleLinesEnabled = true;
+
         private readonly int _renderLoopTimeoutMs = 10;
         private readonly double _rotationAngle = Math.PI / 90;
         private readonly int _observerMoveStep = 10;
@@ -27,8 +28,8 @@ namespace SdlApplication.Window
         private IntPtr _window;
 
         private IScene _scene;
-        private readonly IPolygonDrawer _visibleFacetDrawer;
-        private readonly IPolygonDrawer _notVisibleFacetDrawer;
+        private readonly VisibleFacetDrawer _visibleFacetDrawer;
+        private readonly NotVisibleFacetDrawer _notVisibleFacetDrawer;
 
         public SdlWindow(string title, int screenWidth, int screenHeight)
         {
@@ -36,7 +37,7 @@ namespace SdlApplication.Window
             _screenHeight = screenHeight;
             _screenWidth = screenWidth;
             _visibleFacetDrawer = new VisibleFacetDrawer();
-            _notVisibleFacetDrawer = new NotVisibleFacetDrawer();
+            _notVisibleFacetDrawer = new NotVisibleFacetDrawer(NotVisibleLinesEnabled);
         }
 
         private void InitializeScene()
@@ -117,22 +118,25 @@ namespace SdlApplication.Window
                                 _scene.MoveObserverTo(new HomogeneousPoint3D(0, 0, -_observerMoveStep, 1));
                                 break;
                             case SDL.SDL_Keycode.SDLK_KP_8:
-                                _scene.MoveObserverTo(new HomogeneousPoint3D(0, _observerMoveStep, 0, 1));
-                                break;
-                            case SDL.SDL_Keycode.SDLK_KP_2:
                                 _scene.MoveObserverTo(new HomogeneousPoint3D(0, -_observerMoveStep, 0, 1));
                                 break;
-                            case SDL.SDL_Keycode.SDLK_KP_6:
-                                _scene.MoveObserverTo(new HomogeneousPoint3D(-_observerMoveStep, 0, 0, 1));
+                            case SDL.SDL_Keycode.SDLK_KP_2:
+                                _scene.MoveObserverTo(new HomogeneousPoint3D(0, _observerMoveStep, 0, 1));
                                 break;
-                            case SDL.SDL_Keycode.SDLK_KP_4:
+                            case SDL.SDL_Keycode.SDLK_KP_6:
                                 _scene.MoveObserverTo(new HomogeneousPoint3D(_observerMoveStep, 0, 0, 1));
                                 break;
-                                case SDL.SDL_Keycode.SDLK_t:
+                            case SDL.SDL_Keycode.SDLK_KP_4:
+                                _scene.MoveObserverTo(new HomogeneousPoint3D(-_observerMoveStep, 0, 0, 1));
+                                break;
+                            case SDL.SDL_Keycode.SDLK_t:
                                 _scene.MoveDisplay(_displayMoveStep);
                                 break;
                             case SDL.SDL_Keycode.SDLK_g:
                                 _scene.MoveDisplay(-_displayMoveStep);
+                                break;
+                            case SDL.SDL_Keycode.SDLK_m:
+                                _notVisibleFacetDrawer.Enabled = !_notVisibleFacetDrawer.Enabled;
                                 break;
                             }
                         break;

@@ -11,16 +11,26 @@ namespace SdlApplication.Drawer
     {
         private readonly int _dottlesCount = 5;
 
+        public bool Enabled { get; set; }
+
+        public NotVisibleFacetDrawer(bool enabled)
+        {
+            Enabled = enabled;
+        }
+
         public void Draw(IntPtr renderer, List<Edge2D> edges)
         {
-            foreach (Edge2D edge in edges)
+            if (Enabled)
             {
-                SDL.SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
-
-                foreach (var line in edge.VisibleParts)
+                foreach (Edge2D edge in edges)
                 {
-                    DottledLine.Draw(line.Start, line.End, _dottlesCount,
-                        (p1, p2) => SDL.SDL_RenderDrawLine(renderer, p1.X, p1.Y, p2.X, p2.Y));
+                    SDL.SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
+
+                    foreach (var line in edge.VisibleParts)
+                    {
+                        DottledLine.Draw(line.Start, line.End, _dottlesCount,
+                            (p1, p2) => SDL.SDL_RenderDrawLine(renderer, p1.X, p1.Y, p2.X, p2.Y));
+                    }
                 }
             }
         }
