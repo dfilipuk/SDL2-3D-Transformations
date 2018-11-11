@@ -36,7 +36,7 @@ namespace SdlApplication.Window
             _title = title;
             _screenHeight = screenHeight;
             _screenWidth = screenWidth;
-            _visibleFacetDrawer = new VisibleFacetDrawer();
+            _visibleFacetDrawer = new VisibleFacetDrawer(NotVisibleLinesEnabled);
             _notVisibleFacetDrawer = new NotVisibleFacetDrawer(NotVisibleLinesEnabled);
         }
 
@@ -137,6 +137,7 @@ namespace SdlApplication.Window
                                 break;
                             case SDL.SDL_Keycode.SDLK_m:
                                 _notVisibleFacetDrawer.Enabled = !_notVisibleFacetDrawer.Enabled;
+                                _visibleFacetDrawer.EnabledNotVisibleParts = !_visibleFacetDrawer.EnabledNotVisibleParts;
                                 break;
                             }
                         break;

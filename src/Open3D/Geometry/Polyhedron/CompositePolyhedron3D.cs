@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Clipping2D.Clipping;
 using Open3D.Math;
 
 namespace Open3D.Geometry.Polyhedron
 {
     public class CompositePolyhedron3D : IPolyhedron3D
     {
-        private readonly IList<IPolyhedron3D> _polyhedrons;
+        private IList<IPolyhedron3D> _polyhedrons;
         private readonly List<Polygon3D> _visibleFacets;
         private readonly List<Polygon3D> _notVisibleFacets;
 
@@ -106,7 +107,23 @@ namespace Open3D.Geometry.Polyhedron
 
         public void PerformClipping()
         {
+            var sortedPolyhedrons = _polyhedrons
+                .OrderByDescending(p => p.MaxZ)
+                .ToArray();
 
+            for (int i = 0; i < sortedPolyhedrons.Length; i++)
+            {
+                for (int j = i + 1; j < sortedPolyhedrons.Length; j++)
+                {
+                    foreach (var facet in sortedPolyhedrons[i].VisibleFacets)
+                    {
+                        foreach (var overlappingFacet in sortedPolyhedrons[j].VisibleFacets)
+                        {
+                            facet.Projection.ClipByPolygon(overlappingFacet.Projection, ClippingType.External);
+                        }
+                    }
+                }
+            }
         }
 
         private void CalculateMinMaxZ()
