@@ -60,20 +60,47 @@ namespace Open3D.Geometry.Factory
             HomogeneousPoint3D geometricCenter,
             HomogeneousPoint3D rotationCenter)
         {
+            var delta = 0;
+
             var polyhedrons = new List<IPolyhedron3D>
             {
-                CreateSimplePolyhedron(a, b, c / 3,
-                    new HomogeneousPoint3D(0, 0, -2 * c / 6, 1),
-                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
-                CreateSimplePolyhedron(a, b, c / 3,
-                    new HomogeneousPoint3D(0, 0, 2 * c / 6, 1),
+                //CreateSimplePolyhedron(a, b, c / 3,
+                //    new HomogeneousPoint3D(0, 0, -2 * c / 6, 1),
+                //    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
+                //CreateSimplePolyhedron(a, b, c / 3,
+                //    new HomogeneousPoint3D(0, 0, 2 * c / 6, 1),
+                //    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
+                //CreateSimplePolyhedron(a / 3, b, c / 3,
+                //    new HomogeneousPoint3D(-2 * a / 6, 0, 0, 1),
+                //    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
+                //CreateSimplePolyhedron(a / 3, b, c / 3,
+                //    new HomogeneousPoint3D(2 * a / 6, 0, 0, 1),
+                //    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W))
+
+                CreateSimplePolyhedron(a / 3, b, c / 3,
+                    new HomogeneousPoint3D(0, 0, -2 * c / 6 + delta, 1),
                     new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
                 CreateSimplePolyhedron(a / 3, b, c / 3,
-                    new HomogeneousPoint3D(-2 * a / 6, 0, 0, 1),
+                    new HomogeneousPoint3D(0, 0, 2 * c / 6 - delta, 1),
                     new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
                 CreateSimplePolyhedron(a / 3, b, c / 3,
-                    new HomogeneousPoint3D(2 * a / 6, 0, 0, 1),
-                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W))
+                    new HomogeneousPoint3D(-2 * a / 6 + delta, 0, 0, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
+                CreateSimplePolyhedron(a / 3, b, c / 3,
+                    new HomogeneousPoint3D(2 * a / 6 - delta, 0, 0, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
+                CreateSimplePolyhedron(a / 3, b, c / 3,
+                    new HomogeneousPoint3D(-2 * a / 6 + delta, 0, -2 * c / 6 + delta, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
+                CreateSimplePolyhedron(a / 3, b, c / 3,
+                    new HomogeneousPoint3D(2 * a / 6 - delta, 0, -2 * c / 6 + delta, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
+                CreateSimplePolyhedron(a / 3, b, c / 3,
+                    new HomogeneousPoint3D(2 * a / 6 - delta, 0, 2 * c / 6 - delta, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
+                CreateSimplePolyhedron(a / 3, b, c / 3,
+                    new HomogeneousPoint3D(-2 * a / 6 + delta, 0, 2 * c / 6 - delta, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)),
             };
 
             var result = new CompositePolyhedron3D(rotationCenter, polyhedrons, (0, 1));

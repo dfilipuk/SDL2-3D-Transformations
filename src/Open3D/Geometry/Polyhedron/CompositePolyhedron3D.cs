@@ -89,8 +89,6 @@ namespace Open3D.Geometry.Polyhedron
                 polyhedron.CalculateVisibilityOfFacets();
             }
 
-            PerformClipping();
-
             foreach (var polyhedron in _polyhedrons)
             {
                 foreach (var facet in polyhedron.VisibleFacets)
@@ -103,25 +101,21 @@ namespace Open3D.Geometry.Polyhedron
                     _notVisibleFacets.Add(facet);
                 }
             }
+
+            //PerformClipping();
         }
 
         public void PerformClipping()
         {
-            var sortedPolyhedrons = _polyhedrons
-                .OrderByDescending(p => p.MaxZ)
+            var sortedFacets = VisibleFacets
+                .OrderByDescending(p => p)
                 .ToArray();
 
-            for (int i = 0; i < sortedPolyhedrons.Length; i++)
+            for (int i = 0; i < sortedFacets.Length; i++)
             {
-                for (int j = i + 1; j < sortedPolyhedrons.Length; j++)
+                for (int j = i + 1; j < sortedFacets.Length; j++)
                 {
-                    foreach (var facet in sortedPolyhedrons[i].VisibleFacets)
-                    {
-                        foreach (var overlappingFacet in sortedPolyhedrons[j].VisibleFacets)
-                        {
-                            facet.Projection.ClipByPolygon(overlappingFacet.Projection, ClippingType.External);
-                        }
-                    }
+                    sortedFacets[i].Projection.ClipByPolygon(sortedFacets[j].Projection, ClippingType.External);
                 }
             }
         }
