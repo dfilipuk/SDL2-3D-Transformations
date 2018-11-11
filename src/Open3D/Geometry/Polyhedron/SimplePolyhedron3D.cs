@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Open3D.Math;
 
 namespace Open3D.Geometry.Polyhedron
@@ -11,6 +13,7 @@ namespace Open3D.Geometry.Polyhedron
         private readonly List<Polygon3D> _visibleFacets;
 
         public HomogeneousPoint3D RotationCenter { get; }
+        public (HomogeneousPoint3D Start, HomogeneousPoint3D End) RotationVector { get; }
 
         public IEnumerable<Polygon3D> VisibleFacets
         {
@@ -24,12 +27,13 @@ namespace Open3D.Geometry.Polyhedron
         }
 
         public SimplePolyhedron3D(HomogeneousPoint3D rotationCenter, IList<HomogeneousPoint3D> vertexes, 
-            IEnumerable<IEnumerable<int>> facetVertexes)
+            IEnumerable<IEnumerable<int>> facetVertexes, (int startVertexIndex, int endVertexIndex) rotationAxis)
         {
             RotationCenter = rotationCenter;
             _vertexes = vertexes;
             _facets = new List<Polygon3D>();
             _visibleFacets = new List<Polygon3D>();
+            RotationVector = (_vertexes[rotationAxis.startVertexIndex], _vertexes[rotationAxis.endVertexIndex]);
             CreateFacets(facetVertexes);
         }
 

@@ -40,7 +40,7 @@ namespace SdlApplication.Window
         private void InitializeScene()
         {
             IPolyhedron3D polyhedron = PolyhedronBuilder.CreateSimplePolyhedron(200, 200, 200,
-                new HomogeneousPoint3D(-100, 0, 0, 1), new HomogeneousPoint3D(-100, 0, 0, 1));
+                new HomogeneousPoint3D(0, 0, 0, 1), new HomogeneousPoint3D(0, 0, 0, 1));
             _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -500, 1), polyhedron, 450);
             _scene.Initialize();
         }
@@ -101,6 +101,12 @@ namespace SdlApplication.Window
                                 break;
                             case SDL.SDL_Keycode.SDLK_e:
                                 _scene.RotateAroundAxis(Axis3D.OZ, _rotationAngle);
+                                break;
+                            case SDL.SDL_Keycode.SDLK_z:
+                                _scene.RotateAroundVector(-_rotationAngle);
+                                break;
+                            case SDL.SDL_Keycode.SDLK_x:
+                                _scene.RotateAroundVector(_rotationAngle);
                                 break;
                             case SDL.SDL_Keycode.SDLK_r:
                                 _scene.MoveObserverTo(new HomogeneousPoint3D(0, 0, _observerMoveStep, 1));

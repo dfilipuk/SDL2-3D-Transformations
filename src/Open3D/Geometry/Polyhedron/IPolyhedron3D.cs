@@ -8,6 +8,7 @@ namespace Open3D.Geometry.Polyhedron
     {
         HomogeneousPoint3D RotationCenter { get; }
         IEnumerable<Polygon3D> VisibleFacets { get; }
+        (HomogeneousPoint3D Start, HomogeneousPoint3D End) RotationVector { get; }
 
         void Transform(Matrix affineMatrix);
         void TransformRotationCenter(Matrix affineMatrix);

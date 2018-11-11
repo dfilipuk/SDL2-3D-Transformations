@@ -24,6 +24,8 @@ namespace Open3D.Rendering
 
         void RotateAroundAxis(Axis3D axis, double angle);
 
+        void RotateAroundVector(double angle);
+
         void Render(IntPtr renderer, IPolygonDrawer drawer, Point screenCenter);
     }
 }

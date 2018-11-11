@@ -47,6 +47,12 @@ namespace Open3D.Rendering
             _polyhedron.Transform(affineMatrix);
         }
 
+        public void RotateAroundVector(double angle)
+        {
+            Matrix affineMatrix = _affineTransformationBuilder.RotateAroundVector(_polyhedron.RotationVector, angle);
+            _polyhedron.Transform(affineMatrix);
+        }
+
         public void Render(IntPtr renderer, IPolygonDrawer drawer, Point screenCenter)
         {
             _polyhedron.ProjectVertexesToScreen(_distanceBetweenScreenAndObserver, screenCenter);

@@ -37,5 +37,16 @@ namespace Open3D.Geometry
                 Y = (int) System.Math.Round(Y / (Z / d)) - center.Y
             };
         }
+
+        public HomogeneousPoint3D VectorTo(HomogeneousPoint3D point)
+        {
+            return new HomogeneousPoint3D(point.X - X, point.Y - Y, point.Z - Z, point.W - W);
+        }
+
+        public HomogeneousPoint3D GetUnitVector()
+        {
+            double length = System.Math.Sqrt(X * X + Y * Y + Z * Z);
+            return new HomogeneousPoint3D(X / length, Y / length, Z / length, 0);
+        }
     }
 }

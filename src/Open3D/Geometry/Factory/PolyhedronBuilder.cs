@@ -40,7 +40,8 @@ namespace Open3D.Geometry.Factory
                     new [] { 7, 6, 2, 3 },
                     new [] { 0, 3, 7, 4 },
                     new [] { 1, 2, 6, 5 },
-                });
+                },
+                (0, 6));
             var currentGeometricCenter = new HomogeneousPoint3D(a / 2, b / 2, c / 2, 1);
             var originPoint = new HomogeneousPoint3D(
                 currentGeometricCenter.X - geometricCenter.X,

@@ -73,6 +73,29 @@ namespace Open3D.Math
             return returnOrigin.MultiplyBy(rotationMatrix.MultiplyBy(moveOriginToPoint));
         }
 
+        public Matrix RotateAroundVector((HomogeneousPoint3D Start, HomogeneousPoint3D End) vector, double angle)
+        {
+            var returnPoint = new HomogeneousPoint3D(-vector.Start.X, -vector.Start.Y, -vector.Start.Z, vector.Start.W);
+            Matrix moveOriginToPoint = MoveOriginTo(vector.Start);
+            Matrix returnOrigin = MoveOriginTo(returnPoint);
+
+            // https://en.wikipedia.org/wiki/Rotation_matrix
+
+            Matrix rotationMatrix = GetZeroMatrix();
+            HomogeneousPoint3D rotationVector = vector.Start.VectorTo(vector.End).GetUnitVector();
+            rotationMatrix[0, 0] = System.Math.Cos(angle) + (1 - System.Math.Cos(angle)) * rotationVector.X * rotationVector.X;
+            rotationMatrix[0, 1] = (1 - System.Math.Cos(angle)) * rotationVector.X * rotationVector.Y - System.Math.Sin(angle) * rotationVector.Z;
+            rotationMatrix[0, 2] = (1 - System.Math.Cos(angle)) * rotationVector.X * rotationVector.Z + System.Math.Sin(angle) * rotationVector.Y;
+            rotationMatrix[1, 0] = (1 - System.Math.Cos(angle)) * rotationVector.X * rotationVector.Y + System.Math.Sin(angle) * rotationVector.Z;
+            rotationMatrix[1, 1] = System.Math.Cos(angle) + (1 - System.Math.Cos(angle)) * rotationVector.Y * rotationVector.Y;
+            rotationMatrix[1, 2] = (1 - System.Math.Cos(angle)) * rotationVector.Y * rotationVector.Z - System.Math.Sin(angle) * rotationVector.X;
+            rotationMatrix[2, 0] = (1 - System.Math.Cos(angle)) * rotationVector.X * rotationVector.Z - System.Math.Sin(angle) * rotationVector.Y;
+            rotationMatrix[2, 1] = (1 - System.Math.Cos(angle)) * rotationVector.Y * rotationVector.Z + System.Math.Sin(angle) * rotationVector.X;
+            rotationMatrix[2, 2] = System.Math.Cos(angle) + (1 - System.Math.Cos(angle)) * rotationVector.Z * rotationVector.Z;
+
+            return returnOrigin.MultiplyBy(rotationMatrix.MultiplyBy(moveOriginToPoint));
+        }
+
         public Matrix GetZeroMatrix()
         {
             return new Matrix(4, 4)
