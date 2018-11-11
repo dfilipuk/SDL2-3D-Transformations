@@ -26,6 +26,32 @@ namespace Open3D.Geometry.Polyhedron
             }
         }
 
+        //
+        // CLOCKWISE
+        //
+        //      ->--
+        //      |  |
+        //      |  |
+        //      --<-
+        //
+
+        //
+        // COUNTERCLOCKWISE
+        //
+        //      -<--
+        //      |  |
+        //      |  |
+        //      -->-
+        //
+
+        /// <summary>
+        /// Vertexes for facet should be in COUNTERCLOCKWISE order
+        /// from point when this facet is visible for observer
+        /// </summary>
+        /// <param name="rotationCenter">Rotation center.</param>
+        /// <param name="vertexes">List of vertexes.</param>
+        /// <param name="facetVertexes">Vertexes for every facet.</param>
+        /// <param name="rotationAxis">Vertexes which determines rotation axis.</param>
         public SimplePolyhedron3D(HomogeneousPoint3D rotationCenter, IList<HomogeneousPoint3D> vertexes, 
             IEnumerable<IEnumerable<int>> facetVertexes, (int startVertexIndex, int endVertexIndex) rotationAxis)
         {
