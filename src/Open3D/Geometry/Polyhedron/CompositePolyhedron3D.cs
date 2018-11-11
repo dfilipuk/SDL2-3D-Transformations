@@ -102,7 +102,7 @@ namespace Open3D.Geometry.Polyhedron
                 }
             }
 
-            //PerformClipping();
+            PerformClipping();
         }
 
         public void PerformClipping()
@@ -115,7 +115,10 @@ namespace Open3D.Geometry.Polyhedron
             {
                 for (int j = i + 1; j < sortedFacets.Length; j++)
                 {
-                    sortedFacets[i].Projection.ClipByPolygon(sortedFacets[j].Projection, ClippingType.External);
+                    if (sortedFacets[i].CompareTo(sortedFacets[j]) > 0)
+                    {
+                        sortedFacets[i].Projection.ClipByPolygon(sortedFacets[j].Projection, ClippingType.External);
+                    } 
                 }
             }
         }
