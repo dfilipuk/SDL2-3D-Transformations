@@ -35,12 +35,15 @@ namespace Open3D.Geometry.Polyhedron
 
         public void Transform(Matrix affineMatrix)
         {
-            RotationCenter.Transform(affineMatrix);
-
             foreach (var vertex in _vertexes)
             {
                 vertex.Transform(affineMatrix);
             }
+        }
+
+        public void TransformRotationCenter(Matrix affineMatrix)
+        {
+            RotationCenter.Transform(affineMatrix);
         }
 
         public void ProjectVertexesToScreen(int distanceBetweenScreenAndObserver, Point screenCenter)

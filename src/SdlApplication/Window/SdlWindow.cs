@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading;
 using Clipping2D.Drawer;
 using Open3D.Geometry;
+using Open3D.Geometry.Factory;
 using Open3D.Geometry.Polyhedron;
 using Open3D.Math;
 using Open3D.Rendering;
@@ -38,28 +39,8 @@ namespace SdlApplication.Window
 
         private void InitializeScene()
         {
-            var polyhedron = new SimplePolyhedron3D(
-                new HomogeneousPoint3D(0, 0, 0, 1),
-                new []
-                {
-                    new HomogeneousPoint3D(-100, -100, -100, 1),
-                    new HomogeneousPoint3D(-100, -100, 100, 1),
-                    new HomogeneousPoint3D(100, -100, 100, 1),
-                    new HomogeneousPoint3D(100, -100, -100, 1),
-                    new HomogeneousPoint3D(-100, 100, -100, 1),
-                    new HomogeneousPoint3D(-100, 100, 100, 1),
-                    new HomogeneousPoint3D(100, 100, 100, 1),
-                    new HomogeneousPoint3D(100, 100, -100, 1),
-                },
-                new []
-                {
-                    new [] { 0, 1, 2, 3 },
-                    new [] { 4, 5, 6, 7 },
-                    new [] { 0, 1, 5, 4 },
-                    new [] { 7, 6, 2, 3 },
-                    new [] { 0, 3, 7, 4 },
-                    new [] { 1, 2, 6, 5 },
-                });
+            IPolyhedron3D polyhedron = PolyhedronBuilder.CreateSimplePolyhedron(200, 200, 200,
+                new HomogeneousPoint3D(-100, 0, 0, 1), new HomogeneousPoint3D(-100, 0, 0, 1));
             _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -500, 1), polyhedron, 450);
             _scene.Initialize();
         }

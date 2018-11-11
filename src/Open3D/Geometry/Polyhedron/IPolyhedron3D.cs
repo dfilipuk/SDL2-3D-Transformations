@@ -10,6 +10,7 @@ namespace Open3D.Geometry.Polyhedron
         IEnumerable<Polygon3D> VisibleFacets { get; }
 
         void Transform(Matrix affineMatrix);
+        void TransformRotationCenter(Matrix affineMatrix);
         void ProjectVertexesToScreen(int distanceBetweenScreenAndObserver, Point screenCenter);
         void CalculateVisibleFacets();
     }

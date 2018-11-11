@@ -25,8 +25,7 @@ namespace Open3D.Rendering
         /// <inheritdoc />
         public void Initialize()
         {
-            Matrix affineMatrix = _affineTransformationBuilder.MoveOriginTo(_observerInitialPosition);
-            _polyhedron.Transform(affineMatrix);
+            MoveObserverTo(_observerInitialPosition);
         }
 
         /// <inheritdoc />
@@ -34,6 +33,7 @@ namespace Open3D.Rendering
         {
             Matrix affineMatrix = _affineTransformationBuilder.MoveOriginTo(point);
             _polyhedron.Transform(affineMatrix);
+            _polyhedron.TransformRotationCenter(affineMatrix);
         }
 
         public void MoveDisplay(int moveDistance)
