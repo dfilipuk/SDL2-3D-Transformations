@@ -50,6 +50,7 @@
     <Compile Include="Clipping\LinePosition.cs" />
     <Compile Include="Clipping\PointPosition.cs" />
     <Compile Include="Drawer\IPolygonDrawer.cs" />
+    <Compile Include="Drawer\Utils\DottledLine.cs" />
     <Compile Include="Extension\PointOperations.cs" />
     <Compile Include="Extension\VectorOperations.cs" />
     <Compile Include="Polygon\Edge2D.cs" />

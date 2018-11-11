@@ -51,14 +51,19 @@ namespace Open3D.Rendering
             _polyhedron.Transform(affineMatrix);
         }
 
-        public void Render(IntPtr renderer, IPolygonDrawer drawer, Point screenCenter)
+        public void Render(IntPtr renderer, IPolygonDrawer visibleFacetDrawer, IPolygonDrawer notVisibleFacetDrawer, Point screenCenter)
         {
             _polyhedron.ProjectVertexesToScreen(_distanceBetweenScreenAndObserver, screenCenter);
-            _polyhedron.CalculateVisibleFacets();
+            _polyhedron.CalculateVisibilityOfFacets();
 
             foreach (var facet in _polyhedron.VisibleFacets)
             {
-                facet.Projection.Draw(renderer, drawer);
+                facet.Projection.Draw(renderer, visibleFacetDrawer);
+            }
+
+            foreach (var facet in _polyhedron.NotVisibleFacets)
+            {
+                facet.Projection.Draw(renderer, notVisibleFacetDrawer);
             }
         }
     }

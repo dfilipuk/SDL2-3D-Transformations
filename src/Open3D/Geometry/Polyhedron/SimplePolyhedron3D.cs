@@ -11,6 +11,7 @@ namespace Open3D.Geometry.Polyhedron
         private readonly IList<HomogeneousPoint3D> _vertexes;
         private readonly List<Polygon3D> _facets;
         private readonly List<Polygon3D> _visibleFacets;
+        private readonly List<Polygon3D> _notVisibleFacets;
 
         public HomogeneousPoint3D RotationCenter { get; }
         public (HomogeneousPoint3D Start, HomogeneousPoint3D End) RotationVector { get; }
@@ -20,6 +21,17 @@ namespace Open3D.Geometry.Polyhedron
             get
             {
                 foreach (var facet in _visibleFacets)
+                {
+                    yield return facet;
+                }
+            }
+        }
+
+        public IEnumerable<Polygon3D> NotVisibleFacets
+        {
+            get
+            {
+                foreach (var facet in _notVisibleFacets)
                 {
                     yield return facet;
                 }
@@ -46,7 +58,7 @@ namespace Open3D.Geometry.Polyhedron
 
         /// <summary>
         /// Vertexes for facet should be in COUNTERCLOCKWISE order
-        /// from point when this facet is visible for observer
+        /// from point when this facet is visible for observer.
         /// </summary>
         /// <param name="rotationCenter">Rotation center.</param>
         /// <param name="vertexes">List of vertexes.</param>
@@ -59,6 +71,7 @@ namespace Open3D.Geometry.Polyhedron
             _vertexes = vertexes;
             _facets = new List<Polygon3D>();
             _visibleFacets = new List<Polygon3D>();
+            _notVisibleFacets = new List<Polygon3D>();
             RotationVector = (_vertexes[rotationAxis.startVertexIndex], _vertexes[rotationAxis.endVertexIndex]);
             CreateFacets(facetVertexes);
         }
@@ -84,16 +97,22 @@ namespace Open3D.Geometry.Polyhedron
             }
         }
 
-        public void CalculateVisibleFacets()
+        public void CalculateVisibilityOfFacets()
         {
             _visibleFacets.Clear();
+            _notVisibleFacets.Clear();
 
             foreach (var facet in _facets)
             {
+                facet.CreateProjection();
+
                 if (facet.IsVisibleFromOriginInPositiveZDirection())
                 {
-                    facet.CreateProjection();
                     _visibleFacets.Add(facet);
+                }
+                else
+                {
+                    _notVisibleFacets.Add(facet);
                 }
             }
         }

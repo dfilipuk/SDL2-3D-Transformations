@@ -27,14 +27,16 @@ namespace SdlApplication.Window
         private IntPtr _window;
 
         private IScene _scene;
-        private IPolygonDrawer _polygonDrawer;
+        private readonly IPolygonDrawer _visibleFacetDrawer;
+        private readonly IPolygonDrawer _notVisibleFacetDrawer;
 
         public SdlWindow(string title, int screenWidth, int screenHeight)
         {
             _title = title;
             _screenHeight = screenHeight;
             _screenWidth = screenWidth;
-            _polygonDrawer = new PolygonDrawer();
+            _visibleFacetDrawer = new VisibleFacetDrawer();
+            _notVisibleFacetDrawer = new NotVisibleFacetDrawer();
         }
 
         private void InitializeScene()
@@ -161,7 +163,7 @@ namespace SdlApplication.Window
                 Y = -height / 2
             };
 
-            _scene.Render(_renderer, _polygonDrawer, screenCenter);
+            _scene.Render(_renderer, _visibleFacetDrawer, _notVisibleFacetDrawer, screenCenter);
 
             SDL.SDL_RenderPresent(_renderer);
         }
