@@ -13,7 +13,7 @@ namespace SdlApplication.Window
 {
     public class SdlWindow
     {
-        private const bool NotVisibleLinesEnabled = true;
+        private const bool NotVisibleLinesEnabled = false;
 
         private readonly int _renderLoopTimeoutMs = 10;
         private readonly double _rotationAngle = Math.PI / 90;
@@ -42,9 +42,9 @@ namespace SdlApplication.Window
 
         private void InitializeScene()
         {
-            IPolyhedron3D polyhedron = PolyhedronBuilder.CreateSimplePolyhedron(200, 200, 200,
+            IPolyhedron3D polyhedron = PolyhedronBuilder.CreateCompositePolyhedron(300, 300, 300,
                 new HomogeneousPoint3D(0, 0, 0, 1), new HomogeneousPoint3D(0, 0, 0, 1));
-            _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -500, 1), polyhedron, 450);
+            _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -600, 1), polyhedron, 400);
             _scene.Initialize();
         }
 

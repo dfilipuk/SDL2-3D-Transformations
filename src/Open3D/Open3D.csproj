@@ -47,6 +47,7 @@
     <Compile Include="Geometry\Factory\PolyhedronBuilder.cs" />
     <Compile Include="Geometry\HomogeneousPoint3D.cs" />
     <Compile Include="Geometry\Polygon3D.cs" />
+    <Compile Include="Geometry\Polyhedron\CompositePolyhedron3D.cs" />
     <Compile Include="Geometry\Polyhedron\IPolyhedron3D.cs" />
     <Compile Include="Geometry\Polyhedron\SimplePolyhedron3D.cs" />
     <Compile Include="Math\AffineTransformation.cs" />

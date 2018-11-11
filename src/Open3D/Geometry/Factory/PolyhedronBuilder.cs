@@ -1,4 +1,5 @@
-﻿using Open3D.Geometry.Polyhedron;
+﻿using System.Collections.Generic;
+using Open3D.Geometry.Polyhedron;
 using Open3D.Math;
 
 namespace Open3D.Geometry.Factory
@@ -40,16 +41,62 @@ namespace Open3D.Geometry.Factory
                     new [] { 1, 2, 6, 5 },
                 },
                 (0, 6));
-            var currentGeometricCenter = new HomogeneousPoint3D(a / 2, b / 2, c / 2, 1);
-            var originPoint = new HomogeneousPoint3D(
-                currentGeometricCenter.X - geometricCenter.X,
-                currentGeometricCenter.Y - geometricCenter.Y,
-                currentGeometricCenter.Z - geometricCenter.Z,
-                geometricCenter.W);
-            Matrix affineMatrix = AffineTransformation.MoveOriginTo(originPoint);
-            polyhedron.Transform(affineMatrix);
+
+            MovePolyhedronGeometricCenter(new HomogeneousPoint3D(a / 2, b / 2, c / 2, 1), geometricCenter, polyhedron);
 
             return polyhedron;
+        }
+
+        /// <summary>
+        /// Creates <see cref="CompositePolyhedron3D"/> object with specified parameters.
+        /// </summary>
+        /// <param name="a">Size along OX axis.</param>
+        /// <param name="b">Size along OY axis.</param>
+        /// <param name="c">Size along OZ axis.</param>
+        /// <param name="geometricCenter">Geometric center of figure.</param>
+        /// <param name="rotationCenter">Rotation center of figure.</param>
+        /// <returns></returns>
+        public static IPolyhedron3D CreateCompositePolyhedron(double a, double b, double c,
+            HomogeneousPoint3D geometricCenter,
+            HomogeneousPoint3D rotationCenter)
+        {
+            IPolyhedron3D result;
+            var polyhedrons = new List<IPolyhedron3D>();
+
+            polyhedrons.Add(
+                CreateSimplePolyhedron(a, b, c / 3, 
+                    new HomogeneousPoint3D(0, 0, -2 * c / 6, 1), 
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)));
+            polyhedrons.Add(
+                CreateSimplePolyhedron(a, b, c / 3, 
+                    new HomogeneousPoint3D(0, 0, 2 * c / 6, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)));
+            polyhedrons.Add(
+                CreateSimplePolyhedron(a / 3, b, c / 3, 
+                    new HomogeneousPoint3D(-2 * a / 6, 0, 0, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)));
+            polyhedrons.Add(
+                CreateSimplePolyhedron(a / 3, b, c / 3, 
+                    new HomogeneousPoint3D(2 * a / 6, 0, 0, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W)));
+
+            result = new CompositePolyhedron3D(rotationCenter, polyhedrons, (0, 1));
+
+            MovePolyhedronGeometricCenter(new HomogeneousPoint3D(0, 0, 0, 1), geometricCenter, result);
+
+            return result;
+        }
+
+        private static void MovePolyhedronGeometricCenter(HomogeneousPoint3D currentCenter,
+            HomogeneousPoint3D needCenter, IPolyhedron3D polyhedron)
+        {
+            var originPoint = new HomogeneousPoint3D(
+                currentCenter.X - needCenter.X,
+                currentCenter.Y - needCenter.Y,
+                currentCenter.Z - needCenter.Z,
+                needCenter.W);
+            Matrix affineMatrix = AffineTransformation.MoveOriginTo(originPoint);
+            polyhedron.Transform(affineMatrix);
         }
     }
 }
