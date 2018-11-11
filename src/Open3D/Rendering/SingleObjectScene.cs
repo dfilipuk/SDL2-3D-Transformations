@@ -11,7 +11,6 @@ namespace Open3D.Rendering
     {
         private readonly HomogeneousPoint3D _observerInitialPosition;
         private readonly IPolyhedron3D _polyhedron;
-        private readonly AffineTransformationBuilder _affineTransformationBuilder;
         private int _distanceBetweenScreenAndObserver;
 
         public SingleObjectScene(HomogeneousPoint3D observer, IPolyhedron3D polyhedron, int distanceBetweenScreenAndObserver)
@@ -19,7 +18,6 @@ namespace Open3D.Rendering
             _observerInitialPosition = observer;
             _polyhedron = polyhedron;
             _distanceBetweenScreenAndObserver = distanceBetweenScreenAndObserver;
-            _affineTransformationBuilder = new AffineTransformationBuilder();
         }
 
         /// <inheritdoc />
@@ -31,7 +29,7 @@ namespace Open3D.Rendering
         /// <inheritdoc />
         public void MoveObserverTo(HomogeneousPoint3D point)
         {
-            Matrix affineMatrix = _affineTransformationBuilder.MoveOriginTo(point);
+            Matrix affineMatrix = AffineTransformation.MoveOriginTo(point);
             _polyhedron.Transform(affineMatrix);
             _polyhedron.TransformRotationCenter(affineMatrix);
         }
@@ -43,13 +41,13 @@ namespace Open3D.Rendering
 
         public void RotateAroundAxis(Axis3D axis, double angle)
         {
-            Matrix affineMatrix = _affineTransformationBuilder.RotateAroundAxisAtPoint(axis, _polyhedron.RotationCenter, angle);
+            Matrix affineMatrix = AffineTransformation.RotateAroundAxisAtPoint(axis, _polyhedron.RotationCenter, angle);
             _polyhedron.Transform(affineMatrix);
         }
 
         public void RotateAroundVector(double angle)
         {
-            Matrix affineMatrix = _affineTransformationBuilder.RotateAroundVector(_polyhedron.RotationVector, angle);
+            Matrix affineMatrix = AffineTransformation.RotateAroundVector(_polyhedron.RotationVector, angle);
             _polyhedron.Transform(affineMatrix);
         }
 

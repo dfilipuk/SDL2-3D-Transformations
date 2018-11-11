@@ -3,9 +3,9 @@ using Open3D.Geometry;
 
 namespace Open3D.Math
 {
-    public class AffineTransformationBuilder
+    public static class AffineTransformation
     {
-        public Matrix MoveOriginTo(HomogeneousPoint3D point)
+        public static Matrix MoveOriginTo(HomogeneousPoint3D point)
         {
             Matrix result = GetZeroMatrix();
             result[0, 3] = -point.X;
@@ -15,7 +15,7 @@ namespace Open3D.Math
             return result;
         }
 
-        public Matrix RotateAroundXAxis(double angle)
+        public static Matrix RotateAroundXAxis(double angle)
         {
             Matrix result = GetZeroMatrix();
             result[1, 1] = System.Math.Cos(angle);
@@ -26,7 +26,7 @@ namespace Open3D.Math
             return result;
         }
 
-        public Matrix RotateAroundYAxis(double angle)
+        public static Matrix RotateAroundYAxis(double angle)
         {
             Matrix result = GetZeroMatrix();
             result[0, 0] = System.Math.Cos(angle);
@@ -37,7 +37,7 @@ namespace Open3D.Math
             return result;
         }
 
-        public Matrix RotateAroundZAxis(double angle)
+        public static Matrix RotateAroundZAxis(double angle)
         {
             Matrix result = GetZeroMatrix();
             result[0, 0] = System.Math.Cos(angle);
@@ -48,7 +48,7 @@ namespace Open3D.Math
             return result;
         }
 
-        public Matrix RotateAroundAxisAtPoint(Axis3D axis, HomogeneousPoint3D point, double angle)
+        public static Matrix RotateAroundAxisAtPoint(Axis3D axis, HomogeneousPoint3D point, double angle)
         {
             var returnPoint = new HomogeneousPoint3D(-point.X, -point.Y, -point.Z, point.W);
             Matrix moveOriginToPoint = MoveOriginTo(point);
@@ -73,7 +73,7 @@ namespace Open3D.Math
             return returnOrigin.MultiplyBy(rotationMatrix.MultiplyBy(moveOriginToPoint));
         }
 
-        public Matrix RotateAroundVector((HomogeneousPoint3D Start, HomogeneousPoint3D End) vector, double angle)
+        public static Matrix RotateAroundVector((HomogeneousPoint3D Start, HomogeneousPoint3D End) vector, double angle)
         {
             var returnPoint = new HomogeneousPoint3D(-vector.Start.X, -vector.Start.Y, -vector.Start.Z, vector.Start.W);
             Matrix moveOriginToPoint = MoveOriginTo(vector.Start);
@@ -96,7 +96,7 @@ namespace Open3D.Math
             return returnOrigin.MultiplyBy(rotationMatrix.MultiplyBy(moveOriginToPoint));
         }
 
-        public Matrix GetZeroMatrix()
+        public static Matrix GetZeroMatrix()
         {
             return new Matrix(4, 4)
             {

@@ -49,7 +49,7 @@
     <Compile Include="Geometry\Polygon3D.cs" />
     <Compile Include="Geometry\Polyhedron\IPolyhedron3D.cs" />
     <Compile Include="Geometry\Polyhedron\SimplePolyhedron3D.cs" />
-    <Compile Include="Math\AffineTransformationBuilder.cs" />
+    <Compile Include="Math\AffineTransformation.cs" />
     <Compile Include="Math\Axis3D.cs" />
     <Compile Include="Math\Matrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

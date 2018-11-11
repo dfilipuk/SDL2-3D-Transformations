@@ -5,8 +5,6 @@ namespace Open3D.Geometry.Factory
 {
     public static class PolyhedronBuilder
     {
-        private static readonly AffineTransformationBuilder _affineTransformationBuilder = new AffineTransformationBuilder();
-
         /// <summary>
         /// Creates <see cref="SimplePolyhedron3D"/> object with specified parameters.
         /// </summary>
@@ -48,7 +46,7 @@ namespace Open3D.Geometry.Factory
                 currentGeometricCenter.Y - geometricCenter.Y,
                 currentGeometricCenter.Z - geometricCenter.Z,
                 geometricCenter.W);
-            Matrix affineMatrix = _affineTransformationBuilder.MoveOriginTo(originPoint);
+            Matrix affineMatrix = AffineTransformation.MoveOriginTo(originPoint);
             polyhedron.Transform(affineMatrix);
 
             return polyhedron;
