@@ -2,28 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using Clipping2D.Polygon;
+using Open3D.Geometry.Polyhedron;
 
 namespace Open3D.Geometry
 {
     public class Polygon3D : IComparable<Polygon3D>
     {
         private const int _minVertexesCount = 3;
-        private const double _precision = 0.1;
+        private const double _precision = 0.001;
 
+        private IPolyhedron3D _parent;
         private readonly IList<HomogeneousPoint3D> _vertexes;
 
-        public double MaxZ => _vertexes.Max(v => v.Z);
-        public double MinZ => _vertexes.Min(v => v.Z);
+        public double MaxX { get; private set; }
+        public double MinX { get; private set; }
+        public double MaxY { get; private set; }
+        public double MinY { get; private set; }
+        public double MaxZ { get; private set; }
+        public double MinZ { get; private set; }
+        public double MaxXProj { get; private set; }
+        public double MinXProj { get; private set; }
+        public double MaxYProj { get; private set; }
+        public double MinYProj { get; private set; }
 
         public Polygon2D Projection { get; private set; }
 
-        public Polygon3D(IList<HomogeneousPoint3D> vertexes)
+        public Polygon3D(IList<HomogeneousPoint3D> vertexes, IPolyhedron3D parent)
         {
             if (vertexes.Count < _minVertexesCount)
             {
                 throw new ArgumentException($"{_minVertexesCount} and more vertexes required");
             }
 
+            _parent = parent;
             _vertexes = vertexes;
         }
 
@@ -49,72 +60,48 @@ namespace Open3D.Geometry
             return normalVectorZ < 0;
         }
 
-        public int CompareTo(Polygon3D polygon)
+        public void CalculateDemensions()
         {
-            var maxZ = MaxZ;
-            var pMaxZ = polygon.MaxZ;
+            MaxX = _vertexes.Max(v => v.X);
+            MinX = _vertexes.Min(v => v.X);
+            MaxY = _vertexes.Max(v => v.Y);
+            MinY = _vertexes.Min(v => v.Y);
+            MaxZ = _vertexes.Max(v => v.Z);
+            MinZ = _vertexes.Min(v => v.Z);
+            MaxXProj = _vertexes.Max(v => v.Projection.X);
+            MinXProj = _vertexes.Min(v => v.Projection.X);
+            MaxYProj = _vertexes.Max(v => v.Projection.Y);
+            MinYProj = _vertexes.Min(v => v.Projection.Y);
+        }
 
-            var minZ = MinZ;
-            var pMinZ = polygon.MinZ;
-
-            var meanZ = maxZ - minZ;
-            var pMeanZ = pMaxZ - pMinZ;
-
-            if (System.Math.Abs(maxZ - pMaxZ) <= _precision)
+        public int CompareTo(Polygon3D obj)
+        {
+            if (_parent == obj._parent)
             {
-                if (System.Math.Abs(minZ - pMinZ) <= _precision)
-                {
-                    var minX = _vertexes.Min(v => v.Projection.X);
-                    var pMinX = polygon._vertexes.Min(v => v.Projection.X);
-
-                    if (System.Math.Abs(minX - pMinX) <= _precision)
-                    {
-                        var minY = _vertexes.Min(v => v.Projection.Y);
-                        var pMinY = polygon._vertexes.Min(v => v.Projection.Y);
-
-                        if (System.Math.Abs(minY - pMinY) <= _precision)
-                        {
-                            return 0;
-                        }
-
-                        return (int)((minY - pMinY) / _precision);
-                    }
-
-                    return (int)((minX - pMinX) / _precision);
-                }
-
-                return (int)((minZ - pMinZ) / _precision);
+                return 0;
             }
 
-            return (int)((maxZ - pMaxZ) / _precision);
+            if (System.Math.Abs(MaxZ - obj.MaxZ) >= _precision)
+            {
+                return (int)((MaxZ - obj.MaxZ) / _precision);
+            }
 
+            if (System.Math.Abs(MinZ - obj.MinZ) >= _precision)
+            {
+                return (int)((MinZ - obj.MinZ) / _precision);
+            }
 
-            //if (System.Math.Abs(minZ - pMinZ) <= _precision)
-            //{
-            //    if (System.Math.Abs(maxZ - pMaxZ) <= _precision)
-            //    {
-            //        return 0;
-            //    }
+            if (System.Math.Abs(MinX - obj.MinX) >= _precision)
+            {
+                return (int)((MinX - obj.MinX) / _precision);
+            }
 
-            //    return (int)((maxZ - pMaxZ) / _precision);
-            //}
+            if (System.Math.Abs(MinY - obj.MinY) >= _precision)
+            {
+                return (int)((MinY - obj.MinY) / _precision);
+            }
 
-            //if (System.Math.Abs(minZ - pMinZ) <= _precision)
-            //{
-            //    if (System.Math.Abs(meanZ - pMeanZ) <= _precision)
-            //    {
-            //        if (System.Math.Abs(maxZ - pMaxZ) <= _precision)
-            //        {
-            //            return 0;
-            //        }
-
-            //        return (int)((maxZ - pMaxZ) / _precision);
-            //    }
-
-            //    return (int)((meanZ - pMeanZ) / _precision);
-            //}
-
-            //return (int)((minZ - pMinZ) / _precision);
+            return 0;
         }
     }
 }

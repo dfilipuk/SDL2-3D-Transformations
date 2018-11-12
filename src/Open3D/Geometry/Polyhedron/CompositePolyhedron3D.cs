@@ -12,9 +12,6 @@ namespace Open3D.Geometry.Polyhedron
         private readonly List<Polygon3D> _visibleFacets;
         private readonly List<Polygon3D> _notVisibleFacets;
 
-        public double MaxZ { get; private set; }
-        public double MinZ { get; private set; }
-
         public HomogeneousPoint3D RotationCenter { get; }
         public (HomogeneousPoint3D Start, HomogeneousPoint3D End) RotationVector { get; }
 
@@ -48,7 +45,6 @@ namespace Open3D.Geometry.Polyhedron
                 _polyhedrons[rotationAxis.endIndex].RotationVector.End);
             _visibleFacets = new List<Polygon3D>();
             _notVisibleFacets = new List<Polygon3D>();
-            CalculateMinMaxZ();
         }
 
         public void Transform(Matrix affineMatrix)
@@ -57,8 +53,6 @@ namespace Open3D.Geometry.Polyhedron
             {
                 polyhedron.Transform(affineMatrix);
             }
-
-            CalculateMinMaxZ();
         }
 
         public void TransformRotationCenter(Matrix affineMatrix)
@@ -121,12 +115,6 @@ namespace Open3D.Geometry.Polyhedron
                     } 
                 }
             }
-        }
-
-        private void CalculateMinMaxZ()
-        {
-            MinZ = _polyhedrons.Min(p => p.MinZ);
-            MaxZ = _polyhedrons.Max(p => p.MaxZ);
         }
     }
 }

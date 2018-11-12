@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using Open3D.Math;
 
 namespace Open3D.Geometry.Polyhedron
@@ -12,9 +10,6 @@ namespace Open3D.Geometry.Polyhedron
         private readonly List<Polygon3D> _facets;
         private readonly List<Polygon3D> _visibleFacets;
         private readonly List<Polygon3D> _notVisibleFacets;
-
-        public double MaxZ { get; private set; }
-        public double MinZ { get; private set; }
 
         public HomogeneousPoint3D RotationCenter { get; }
         public (HomogeneousPoint3D Start, HomogeneousPoint3D End) RotationVector { get; }
@@ -77,7 +72,6 @@ namespace Open3D.Geometry.Polyhedron
             _notVisibleFacets = new List<Polygon3D>();
             RotationVector = (_vertexes[rotationAxis.startVertexIndex], _vertexes[rotationAxis.endVertexIndex]);
             CreateFacets(facetVertexes);
-            CalculateMinMaxZ();
         }
 
         public void Transform(Matrix affineMatrix)
@@ -86,8 +80,6 @@ namespace Open3D.Geometry.Polyhedron
             {
                 vertex.Transform(affineMatrix);
             }
-
-            CalculateMinMaxZ();
         }
 
         public void TransformRotationCenter(Matrix affineMatrix)
@@ -111,6 +103,7 @@ namespace Open3D.Geometry.Polyhedron
             foreach (var facet in _facets)
             {
                 facet.CreateProjection();
+                facet.CalculateDemensions();
 
                 if (facet.IsVisibleFromOriginInPositiveZDirection())
                 {
@@ -134,14 +127,8 @@ namespace Open3D.Geometry.Polyhedron
                     vertexesList.Add(_vertexes[vertexIndex]);
                 }
 
-                _facets.Add(new Polygon3D(vertexesList));
+                _facets.Add(new Polygon3D(vertexesList, this));
             }
-        }
-
-        private void CalculateMinMaxZ()
-        {
-            MinZ = _vertexes.Min(v => v.Z);
-            MaxZ = _vertexes.Max(v => v.Z);
         }
     }
 }
