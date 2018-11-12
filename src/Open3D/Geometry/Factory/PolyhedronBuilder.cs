@@ -8,7 +8,7 @@ namespace Open3D.Geometry.Factory
     public static class PolyhedronBuilder
     {
         /// <summary>
-        /// Creates <see cref="SimplePolyhedron3D"/> object with specified parameters.
+        /// Creates <see cref="IPolyhedron3D"/> object with specified parameters.
         /// </summary>
         /// <param name="a">Size along OX axis.</param>
         /// <param name="b">Size along OY axis.</param>
@@ -16,7 +16,7 @@ namespace Open3D.Geometry.Factory
         /// <param name="geometricCenter">Geometric center of figure.</param>
         /// <param name="rotationCenter">Rotation center of figure.</param>
         /// <returns></returns>
-        public static IPolyhedron3D CreateSimplePolyhedron(
+        public static IPolyhedron3D CreateSingleSimplePolyhedron(
             double a, double b, double c, 
             HomogeneousPoint3D geometricCenter,
             HomogeneousPoint3D rotationCenter)
@@ -25,7 +25,26 @@ namespace Open3D.Geometry.Factory
         }
 
         /// <summary>
-        /// Creates <see cref="CompositePolyhedron3D"/> object with specified parameters.
+        /// Creates <see cref="IPolyhedron3D"/> object with specified parameters.
+        /// </summary>
+        /// <param name="a">Size along OX axis.</param>
+        /// <param name="b">Size along OY axis.</param>
+        /// <param name="c">Size along OZ axis.</param>
+        /// <param name="geometricCenter">Geometric center of figure.</param>
+        /// <param name="rotationCenter">Rotation center of figure.</param>
+        /// <param name="distance">Distance from Origin to each polyhedron geometric center.</param>
+        /// <returns></returns>
+        public static IPolyhedron3D CreateManySimplePolyhedrons(
+            double a, double b, double c,
+            HomogeneousPoint3D geometricCenter,
+            HomogeneousPoint3D rotationCenter,
+            double distance)
+        {
+            return CreateParallelepipedWithHole(a, b, c, geometricCenter, rotationCenter, distance, true);
+        }
+
+        /// <summary>
+        /// Creates <see cref="IPolyhedron3D"/> object with specified parameters.
         /// </summary>
         /// <param name="a">Size along OX axis.</param>
         /// <param name="b">Size along OY axis.</param>
