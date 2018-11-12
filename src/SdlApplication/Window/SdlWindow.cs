@@ -14,6 +14,10 @@ namespace SdlApplication.Window
     public class SdlWindow
     {
         private const bool NotVisibleLinesEnabled = false;
+        private const double A = 300;
+        private const double B = 300;
+        private const double C = 300;
+        private const double DistanceBetweenPolyhedrons = 50;
 
         private readonly int _renderLoopTimeoutMs = 10;
         private readonly double _rotationAngle = Math.PI / 90;
@@ -43,7 +47,7 @@ namespace SdlApplication.Window
         private void InitializeScene()
         {
             IPolyhedron3D polyhedron = PolyhedronBuilder.CreateCompositePolyhedron(
-                300, 300, 300,
+                A, B, C,
                 new HomogeneousPoint3D(0, 0, 0, 1),
                 new HomogeneousPoint3D(0, 0, 0, 1));
             _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -600, 1), polyhedron, 400);
@@ -140,6 +144,25 @@ namespace SdlApplication.Window
                             case SDL.SDL_Keycode.SDLK_m:
                                 _notVisibleFacetDrawer.Enabled = !_notVisibleFacetDrawer.Enabled;
                                 _visibleFacetDrawer.EnabledNotVisibleParts = !_visibleFacetDrawer.EnabledNotVisibleParts;
+                                break;
+                            case SDL.SDL_Keycode.SDLK_1:
+                                _scene.AddObject(PolyhedronBuilder.CreateSingleSimplePolyhedron(
+                                    A, B, C,
+                                    new HomogeneousPoint3D(0, 0, 0, 1),
+                                    new HomogeneousPoint3D(0, 0, 0, 1)));
+                                break;
+                            case SDL.SDL_Keycode.SDLK_2:
+                                _scene.AddObject(PolyhedronBuilder.CreateCompositePolyhedron(
+                                    A, B, C,
+                                    new HomogeneousPoint3D(0, 0, 0, 1),
+                                    new HomogeneousPoint3D(0, 0, 0, 1)));
+                                break;
+                            case SDL.SDL_Keycode.SDLK_3:
+                                _scene.AddObject(PolyhedronBuilder.CreateManySimplePolyhedrons(
+                                    A, B, C,
+                                    new HomogeneousPoint3D(0, 0, 0, 1),
+                                    new HomogeneousPoint3D(0, 0, 0, 1),
+                                    DistanceBetweenPolyhedrons));
                                 break;
                             }
                         break;

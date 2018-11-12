@@ -21,7 +21,7 @@ namespace Open3D.Geometry.Factory
             HomogeneousPoint3D geometricCenter,
             HomogeneousPoint3D rotationCenter)
         {
-            return CreateParallelepiped(a, b, c, geometricCenter, rotationCenter, new int[] {2,3});
+            return CreateParallelepiped(a, b, c, geometricCenter, rotationCenter, new int[0]);
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Drawing;
 using Clipping2D.Drawer;
 using Open3D.Geometry;
+using Open3D.Geometry.Polyhedron;
 using Open3D.Math;
 
 namespace Open3D.Rendering
@@ -25,6 +26,8 @@ namespace Open3D.Rendering
         void RotateAroundAxis(Axis3D axis, double angle);
 
         void RotateAroundVector(double angle);
+
+        void AddObject(IPolyhedron3D polyhedron);
 
         void Render(IntPtr renderer, IPolygonDrawer visibleFacetDrawer, IPolygonDrawer notVisibleFacetDrawer, Point screenCenter);
     }

@@ -38,6 +38,11 @@ namespace Open3D.Geometry
             };
         }
 
+        public HomogeneousPoint3D Add(HomogeneousPoint3D point)
+        {
+            return new HomogeneousPoint3D(X + point.X, Y + point.Y, Z + point.Z, W);
+        }
+
         public HomogeneousPoint3D VectorTo(HomogeneousPoint3D point)
         {
             return new HomogeneousPoint3D(point.X - X, point.Y - Y, point.Z - Z, point.W - W);
