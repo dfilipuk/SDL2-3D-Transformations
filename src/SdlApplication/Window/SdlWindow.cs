@@ -4,7 +4,6 @@ using System.Threading;
 using Open3D.Geometry;
 using Open3D.Geometry.Factory;
 using Open3D.Geometry.Polyhedron;
-using Open3D.Math;
 using Open3D.Rendering;
 using SdlApplication.Drawer;
 using SDL2;
@@ -64,6 +63,20 @@ namespace SdlApplication.Window
             thred.Join();
         }
 
+        /// <summary>
+        /// W, S        - Rotate around OX;
+        /// A, D        - Rotate around OY;
+        /// Q, E        - Rotate around OZ;
+        /// Z, X        - Rotate around custom vector;
+        /// R, F        - Move observer forward / backwards;
+        /// NP_8, NP_2  - Move observer up / down;
+        /// NP_4, NP_6  - Move observer left / right;
+        /// T, G        - Move display forward / backwards;
+        /// M           - Enable / disable invisible lines;
+        /// O           - Single object scene (SOS);
+        /// P           - Multiple objects scene (MOS).
+        /// 1-4         - Switch figures (SOS), add figures (MOS);
+        /// </summary>
         private void WindowProcedure()
         {
             bool exit = false;
