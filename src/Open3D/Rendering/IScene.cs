@@ -22,6 +22,10 @@ namespace Open3D.Rendering
 
         void AddObject(IPolyhedron3D polyhedron);
 
-        void Render(IntPtr renderer, IPolygonDrawer visibleFacetDrawer, IPolygonDrawer notVisibleFacetDrawer, Point screenCenter);
+        void Render(
+            IntPtr renderer, 
+            IPolygonDrawer visibleFacetDrawer, 
+            IPolygonDrawer notVisibleFacetDrawer, 
+            Point screenCenter);
     }
 }

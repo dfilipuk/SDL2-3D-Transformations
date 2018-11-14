@@ -124,7 +124,7 @@ namespace Open3D.Geometry.Factory
                     new [] { 5 }),
             };
 
-            var result = new CompositePolyhedron3D(rotationCenter, cubes, (0, 0));
+            var result = new CompositePolyhedron3D(rotationCenter, new HomogeneousPoint3D(a / 2, -b / 2, c / 2, 1), cubes, (0, 0));
 
             MovePolyhedronGeometricCenter(new HomogeneousPoint3D(a / 2, -b / 2, c / 2, 1), geometricCenter, result);
 
@@ -181,7 +181,7 @@ namespace Open3D.Geometry.Factory
                     showInvisibleFacets ? new int[0] : new [] {0,2}),
             };
 
-            var result = new CompositePolyhedron3D(rotationCenter, parallelepiped, (0, 1));
+            var result = new CompositePolyhedron3D(rotationCenter, new HomogeneousPoint3D(0, 0, 0, 1), parallelepiped, (0, 1));
 
             MovePolyhedronGeometricCenter(new HomogeneousPoint3D(0, 0, 0, 1), geometricCenter, result);
 
@@ -229,7 +229,7 @@ namespace Open3D.Geometry.Factory
             }
 
             var parallelepiped = new SimplePolyhedron3D(
-                rotationCenter,
+                rotationCenter, new HomogeneousPoint3D(a / 2, b / 2, c / 2, 1),
                 new[]
                 {
                     new HomogeneousPoint3D(0, 0, 0, 1),

@@ -53,7 +53,7 @@ namespace SdlApplication.Window
                     _screenWidth, _screenHeight, SDL.SDL_WindowFlags.SDL_WINDOW_RESIZABLE);
                 _renderer = SDL.SDL_CreateRenderer(_window, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED);
 
-                InitializeScene();
+                InitializeSingleObjectScene();
                 WindowProcedure();
 
                 SDL.SDL_DestroyRenderer(_renderer);
@@ -151,6 +151,12 @@ namespace SdlApplication.Window
                                 _currenPolyhedronType = PolyhedronType.Cubes;
                                 AddObjectToScene();
                                 break;
+                            case SDL.SDL_Keycode.SDLK_p:
+                                InitializeMultipleObjectsScene();
+                                break;
+                            case SDL.SDL_Keycode.SDLK_o:
+                                InitializeSingleObjectScene();
+                                break;
                             }
                         break;
                     }
@@ -160,7 +166,7 @@ namespace SdlApplication.Window
             }
         }
 
-        private void InitializeScene()
+        private void InitializeSingleObjectScene()
         {
             IPolyhedron3D polyhedron = PolyhedronBuilder.CreatePolyhedron(
                 _currenPolyhedronType,
@@ -168,6 +174,16 @@ namespace SdlApplication.Window
                 new HomogeneousPoint3D(0, 0, 0, 1),
                 A);
             _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -600, 1), polyhedron, 400);
+        }
+
+        private void InitializeMultipleObjectsScene()
+        {
+            IPolyhedron3D polyhedron = PolyhedronBuilder.CreatePolyhedron(
+                _currenPolyhedronType,
+                new HomogeneousPoint3D(0, 0, 0, 1),
+                new HomogeneousPoint3D(0, 0, 0, 1),
+                A);
+            _scene = new MultipleObjectsScene(new HomogeneousPoint3D(0, 0, -600, 1), polyhedron, 400);
         }
 
         private void AddObjectToScene()

@@ -11,7 +11,6 @@ namespace Open3D.Rendering
     public abstract class Scene : IScene
     {
         protected HomogeneousPoint3D _observerPosition;
-        protected IPolyhedron3D _object;
 
         protected double _rotationAngleAroundVector = 0;
         protected readonly Dictionary<Axis3D, double> _rotationAngleAroundAxis = new Dictionary<Axis3D, double>
@@ -30,65 +29,59 @@ namespace Open3D.Rendering
             _distanceBetweenScreenAndObserver = distanceBetweenScreenAndObserver;
         }
 
-        protected void MoveObserverToTransformation(HomogeneousPoint3D point)
+        protected void MoveObserverToTransformation(HomogeneousPoint3D point, IPolyhedron3D obj)
         {
             Matrix affineMatrix = AffineTransformation.MoveOriginTo(point);
-            _object.Transform(affineMatrix);
-            _object.TransformRotationCenter(affineMatrix);
+            obj.Transform(affineMatrix);
+            obj.TransformRotationCenter(affineMatrix);
         }
 
-        protected void RotateAroundAxisTransformation(Axis3D axis, double angle)
+        protected void RotateAroundAxisTransformation(Axis3D axis, double angle, IPolyhedron3D obj)
         {
-            Matrix affineMatrix = AffineTransformation.RotateAroundAxisAtPoint(axis, _object.RotationCenter, angle);
-            _object.Transform(affineMatrix);
+            Matrix affineMatrix = AffineTransformation.RotateAroundAxisAtPoint(axis, obj.RotationCenter, angle);
+            obj.Transform(affineMatrix);
         }
 
-        protected void RotateAroundVectorTransformation(double angle)
+        protected void RotateAroundVectorTransformation(double angle, IPolyhedron3D obj)
         {
-            Matrix affineMatrix = AffineTransformation.RotateAroundVector(_object.RotationVector, angle);
-            _object.Transform(affineMatrix);
+            Matrix affineMatrix = AffineTransformation.RotateAroundVector(obj.RotationVector, angle);
+            obj.Transform(affineMatrix);
         }
 
-        public abstract void AddObject(IPolyhedron3D polyhedron);
-
-        /// <inheritdoc />
-        public void MoveObserverTo(HomogeneousPoint3D point)
+        protected void RenderObj(
+            IntPtr renderer,
+            IPolygonDrawer visibleFacetDrawer,
+            IPolygonDrawer notVisibleFacetDrawer,
+            Point screenCenter,
+            IPolyhedron3D obj)
         {
-            MoveObserverToTransformation(point);
-            _observerPosition = _observerPosition.Add(point);
-        }
+            obj.ProjectVertexesToScreen(_distanceBetweenScreenAndObserver, screenCenter);
+            obj.CalculateVisibilityOfFacets();
 
-        public void MoveDisplay(int moveDistance)
-        {
-            _distanceBetweenScreenAndObserver += moveDistance;
-        }
-
-        public void RotateAroundAxis(Axis3D axis, double angle)
-        {
-            RotateAroundAxisTransformation(axis, angle);
-            _rotationAngleAroundAxis[axis] += angle;
-        }
-
-        public void RotateAroundVector(double angle)
-        {
-            RotateAroundVectorTransformation(angle);
-            _rotationAngleAroundVector += angle;
-        }
-
-        public void Render(IntPtr renderer, IPolygonDrawer visibleFacetDrawer, IPolygonDrawer notVisibleFacetDrawer, Point screenCenter)
-        {
-            _object.ProjectVertexesToScreen(_distanceBetweenScreenAndObserver, screenCenter);
-            _object.CalculateVisibilityOfFacets();
-
-            foreach (var facet in _object.VisibleFacets)
+            foreach (var facet in obj.VisibleFacets)
             {
                 facet.Projection.Draw(renderer, visibleFacetDrawer);
             }
 
-            foreach (var facet in _object.NotVisibleFacets)
+            foreach (var facet in obj.NotVisibleFacets)
             {
                 facet.Projection.Draw(renderer, notVisibleFacetDrawer);
             }
         }
+
+        public virtual void MoveDisplay(int moveDistance)
+        {
+            _distanceBetweenScreenAndObserver += moveDistance;
+        }
+
+        public abstract void MoveObserverTo(HomogeneousPoint3D point);
+        public abstract void RotateAroundAxis(Axis3D axis, double angle);
+        public abstract void RotateAroundVector(double angle);
+        public abstract void AddObject(IPolyhedron3D polyhedron);
+        public abstract void Render(
+            IntPtr renderer, 
+            IPolygonDrawer visibleFacetDrawer, 
+            IPolygonDrawer notVisibleFacetDrawer, 
+            Point screenCenter);
     }
 }

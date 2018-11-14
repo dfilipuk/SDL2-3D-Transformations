@@ -36,10 +36,11 @@ namespace Open3D.Geometry.Polyhedron
         /// <param name="facetVertexes">Vertexes for every facet.</param>
         /// <param name="rotationAxis">Vertexes which determines rotation axis.</param>
         public SimplePolyhedron3D(
-            HomogeneousPoint3D rotationCenter, 
+            HomogeneousPoint3D rotationCenter,
+            HomogeneousPoint3D geometricCenter,
             IList<HomogeneousPoint3D> vertexes, 
             IEnumerable<IEnumerable<int>> facetVertexes, 
-            (int startVertexIndex, int endVertexIndex) rotationAxis) : base(rotationCenter)
+            (int startVertexIndex, int endVertexIndex) rotationAxis) : base(rotationCenter, geometricCenter)
         {
             _vertexes = vertexes;
             _facets = new List<Polygon3D>();
@@ -50,6 +51,8 @@ namespace Open3D.Geometry.Polyhedron
 
         public override void Transform(Matrix affineMatrix)
         {
+            base.Transform(affineMatrix);
+
             foreach (var vertex in _vertexes)
             {
                 vertex.Transform(affineMatrix);

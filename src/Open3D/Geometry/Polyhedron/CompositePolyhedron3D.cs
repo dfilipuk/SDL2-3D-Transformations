@@ -11,9 +11,10 @@ namespace Open3D.Geometry.Polyhedron
         private readonly IList<IPolyhedron3D> _polyhedrons;
 
         public CompositePolyhedron3D(
-            HomogeneousPoint3D rotationCenter, 
+            HomogeneousPoint3D rotationCenter,
+            HomogeneousPoint3D geometricCenter,
             IList<IPolyhedron3D> polyhedrons, 
-            (int startIndex, int endIndex) rotationAxis) : base(rotationCenter)
+            (int startIndex, int endIndex) rotationAxis) : base(rotationCenter, geometricCenter)
         {
             _polyhedrons = polyhedrons;
             RotationVector = (_polyhedrons[rotationAxis.startIndex].RotationVector.Start,
@@ -22,6 +23,8 @@ namespace Open3D.Geometry.Polyhedron
 
         public override void Transform(Matrix affineMatrix)
         {
+            base.Transform(affineMatrix);
+
             foreach (var polyhedron in _polyhedrons)
             {
                 polyhedron.Transform(affineMatrix);

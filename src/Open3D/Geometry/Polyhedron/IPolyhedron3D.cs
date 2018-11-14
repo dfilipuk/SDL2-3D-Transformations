@@ -7,6 +7,7 @@ namespace Open3D.Geometry.Polyhedron
     public interface IPolyhedron3D
     {
         HomogeneousPoint3D RotationCenter { get; }
+        HomogeneousPoint3D GeometricCenter { get; }
         (HomogeneousPoint3D Start, HomogeneousPoint3D End) RotationVector { get; }
 
         IEnumerable<Polygon3D> VisibleFacets { get; }
