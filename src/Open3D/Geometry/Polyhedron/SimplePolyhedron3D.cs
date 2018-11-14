@@ -4,37 +4,10 @@ using Open3D.Math;
 
 namespace Open3D.Geometry.Polyhedron
 {
-    public class SimplePolyhedron3D : IPolyhedron3D
+    public class SimplePolyhedron3D : Polyhedron3D
     {
         private readonly IList<HomogeneousPoint3D> _vertexes;
         private readonly List<Polygon3D> _facets;
-        private readonly List<Polygon3D> _visibleFacets;
-        private readonly List<Polygon3D> _notVisibleFacets;
-
-        public HomogeneousPoint3D RotationCenter { get; }
-        public (HomogeneousPoint3D Start, HomogeneousPoint3D End) RotationVector { get; }
-
-        public IEnumerable<Polygon3D> VisibleFacets
-        {
-            get
-            {
-                foreach (var facet in _visibleFacets)
-                {
-                    yield return facet;
-                }
-            }
-        }
-
-        public IEnumerable<Polygon3D> NotVisibleFacets
-        {
-            get
-            {
-                foreach (var facet in _notVisibleFacets)
-                {
-                    yield return facet;
-                }
-            }
-        }
 
         //
         // CLOCKWISE
@@ -62,19 +35,20 @@ namespace Open3D.Geometry.Polyhedron
         /// <param name="vertexes">List of vertexes.</param>
         /// <param name="facetVertexes">Vertexes for every facet.</param>
         /// <param name="rotationAxis">Vertexes which determines rotation axis.</param>
-        public SimplePolyhedron3D(HomogeneousPoint3D rotationCenter, IList<HomogeneousPoint3D> vertexes, 
-            IEnumerable<IEnumerable<int>> facetVertexes, (int startVertexIndex, int endVertexIndex) rotationAxis)
+        public SimplePolyhedron3D(
+            HomogeneousPoint3D rotationCenter, 
+            IList<HomogeneousPoint3D> vertexes, 
+            IEnumerable<IEnumerable<int>> facetVertexes, 
+            (int startVertexIndex, int endVertexIndex) rotationAxis) : base(rotationCenter)
         {
-            RotationCenter = rotationCenter;
             _vertexes = vertexes;
             _facets = new List<Polygon3D>();
-            _visibleFacets = new List<Polygon3D>();
-            _notVisibleFacets = new List<Polygon3D>();
             RotationVector = (_vertexes[rotationAxis.startVertexIndex], _vertexes[rotationAxis.endVertexIndex]);
+
             CreateFacets(facetVertexes);
         }
 
-        public void Transform(Matrix affineMatrix)
+        public override void Transform(Matrix affineMatrix)
         {
             foreach (var vertex in _vertexes)
             {
@@ -82,12 +56,12 @@ namespace Open3D.Geometry.Polyhedron
             }
         }
 
-        public void TransformRotationCenter(Matrix affineMatrix)
+        public override void TransformRotationCenter(Matrix affineMatrix)
         {
             RotationCenter.Transform(affineMatrix);
         }
 
-        public void ProjectVertexesToScreen(int distanceBetweenScreenAndObserver, Point screenCenter)
+        public override void ProjectVertexesToScreen(int distanceBetweenScreenAndObserver, Point screenCenter)
         {
             foreach (var vertex in _vertexes)
             {
@@ -95,7 +69,7 @@ namespace Open3D.Geometry.Polyhedron
             }
         }
 
-        public void CalculateVisibilityOfFacets()
+        public override void CalculateVisibilityOfFacets()
         {
             _visibleFacets.Clear();
             _notVisibleFacets.Clear();

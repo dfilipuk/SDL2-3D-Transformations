@@ -6,48 +6,21 @@ using Open3D.Math;
 
 namespace Open3D.Geometry.Polyhedron
 {
-    public class CompositePolyhedron3D : IPolyhedron3D
+    public class CompositePolyhedron3D : Polyhedron3D
     {
-        private IList<IPolyhedron3D> _polyhedrons;
-        private readonly List<Polygon3D> _visibleFacets;
-        private readonly List<Polygon3D> _notVisibleFacets;
+        private readonly IList<IPolyhedron3D> _polyhedrons;
 
-        public HomogeneousPoint3D RotationCenter { get; }
-        public (HomogeneousPoint3D Start, HomogeneousPoint3D End) RotationVector { get; }
-
-        public IEnumerable<Polygon3D> VisibleFacets
+        public CompositePolyhedron3D(
+            HomogeneousPoint3D rotationCenter, 
+            IList<IPolyhedron3D> polyhedrons, 
+            (int startIndex, int endIndex) rotationAxis) : base(rotationCenter)
         {
-            get
-            {
-                foreach (var facet in _visibleFacets)
-                {
-                    yield return facet;
-                }
-            }
-        }
-
-        public IEnumerable<Polygon3D> NotVisibleFacets
-        {
-            get
-            {
-                foreach (var facet in _notVisibleFacets)
-                {
-                    yield return facet;
-                }
-            }
-        }
-
-        public CompositePolyhedron3D(HomogeneousPoint3D rotationCenter, IList<IPolyhedron3D> polyhedrons, (int startIndex, int endIndex) rotationAxis)
-        {
-            RotationCenter = rotationCenter;
             _polyhedrons = polyhedrons;
             RotationVector = (_polyhedrons[rotationAxis.startIndex].RotationVector.Start,
                 _polyhedrons[rotationAxis.endIndex].RotationVector.End);
-            _visibleFacets = new List<Polygon3D>();
-            _notVisibleFacets = new List<Polygon3D>();
         }
 
-        public void Transform(Matrix affineMatrix)
+        public override void Transform(Matrix affineMatrix)
         {
             foreach (var polyhedron in _polyhedrons)
             {
@@ -55,7 +28,7 @@ namespace Open3D.Geometry.Polyhedron
             }
         }
 
-        public void TransformRotationCenter(Matrix affineMatrix)
+        public override void TransformRotationCenter(Matrix affineMatrix)
         {
             foreach (var polyhedron in _polyhedrons)
             {
@@ -65,7 +38,7 @@ namespace Open3D.Geometry.Polyhedron
             RotationCenter.Transform(affineMatrix);
         }
 
-        public void ProjectVertexesToScreen(int distanceBetweenScreenAndObserver, Point screenCenter)
+        public override void ProjectVertexesToScreen(int distanceBetweenScreenAndObserver, Point screenCenter)
         {
             foreach (var polyhedron in _polyhedrons)
             {
@@ -73,7 +46,7 @@ namespace Open3D.Geometry.Polyhedron
             }
         }
 
-        public void CalculateVisibilityOfFacets()
+        public override void CalculateVisibilityOfFacets()
         {
             _visibleFacets.Clear();
             _notVisibleFacets.Clear();
@@ -99,7 +72,7 @@ namespace Open3D.Geometry.Polyhedron
             PerformClipping();
         }
 
-        public void PerformClipping()
+        private void PerformClipping()
         {
             var sortedFacets = VisibleFacets
                 .OrderByDescending(p => p)
