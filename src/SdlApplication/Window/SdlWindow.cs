@@ -162,14 +162,12 @@ namespace SdlApplication.Window
 
         private void InitializeScene()
         {
-
             IPolyhedron3D polyhedron = PolyhedronBuilder.CreatePolyhedron(
                 _currenPolyhedronType,
                 new HomogeneousPoint3D(0, 0, 0, 1),
                 new HomogeneousPoint3D(0, 0, 0, 1),
                 A);
             _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -600, 1), polyhedron, 400);
-            _scene.Initialize();
         }
 
         private void AddObjectToScene()

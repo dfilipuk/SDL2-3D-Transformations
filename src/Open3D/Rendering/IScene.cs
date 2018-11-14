@@ -10,12 +10,6 @@ namespace Open3D.Rendering
     public interface IScene
     {
         /// <summary>
-        /// Initializes the scene.
-        /// Should be called before any manipulations with scene.
-        /// </summary>
-        void Initialize();
-
-        /// <summary>
         /// Before move observer at Origin.
         /// </summary>
         /// <param name="point"></param>
