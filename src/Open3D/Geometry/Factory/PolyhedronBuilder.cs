@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Open3D.Geometry.Polyhedron;
 using Open3D.Math;
@@ -7,6 +8,35 @@ namespace Open3D.Geometry.Factory
 {
     public static class PolyhedronBuilder
     {
+        public static IPolyhedron3D CreatePolyhedron(
+            PolyhedronType type,
+            HomogeneousPoint3D geometricCenter,
+            HomogeneousPoint3D rotationCenter,
+            params double[] args)
+        {
+            switch (type)
+            {
+                case PolyhedronType.Parallelepiped:
+                    return CreateSingleSimplePolyhedron(
+                        args[0], args[0], args[0],
+                        geometricCenter,
+                        rotationCenter);
+                case PolyhedronType.ParallelepipedWithHole:
+                    return CreateCompositePolyhedron(
+                        args[0], args[0] / 4.5, args[0],
+                        geometricCenter,
+                        rotationCenter);
+                case PolyhedronType.ManyParallelepipeds:
+                    return CreateManySimplePolyhedrons(
+                        args[0], args[0], args[0],
+                        geometricCenter,
+                        rotationCenter,
+                        50);
+                default:
+                    throw new ArgumentException($"No builder for type {type}");
+            }
+        }
+        
         /// <summary>
         /// Creates <see cref="IPolyhedron3D"/> object with specified parameters.
         /// </summary>

@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Geometry\Factory\PolyhedronBuilder.cs" />
+    <Compile Include="Geometry\Factory\PolyhedronType.cs" />
     <Compile Include="Geometry\HomogeneousPoint3D.cs" />
     <Compile Include="Geometry\Polygon3D.cs" />
     <Compile Include="Geometry\Polyhedron\CompositePolyhedron3D.cs" />

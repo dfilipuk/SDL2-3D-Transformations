@@ -15,9 +15,6 @@ namespace SdlApplication.Window
     {
         private const bool NotVisibleLinesEnabled = false;
         private const double A = 300;
-        private const double B = 300;
-        private const double C = 300;
-        private const double DistanceBetweenPolyhedrons = 50;
 
         private readonly int _renderLoopTimeoutMs = 10;
         private readonly double _rotationAngle = Math.PI / 90;
@@ -35,23 +32,16 @@ namespace SdlApplication.Window
         private readonly VisibleFacetDrawer _visibleFacetDrawer;
         private readonly NotVisibleFacetDrawer _notVisibleFacetDrawer;
 
+        private PolyhedronType _currenPolyhedronType;
+
         public SdlWindow(string title, int screenWidth, int screenHeight)
         {
             _title = title;
             _screenHeight = screenHeight;
             _screenWidth = screenWidth;
+            _currenPolyhedronType = PolyhedronType.ParallelepipedWithHole;
             _visibleFacetDrawer = new VisibleFacetDrawer(NotVisibleLinesEnabled);
             _notVisibleFacetDrawer = new NotVisibleFacetDrawer(NotVisibleLinesEnabled);
-        }
-
-        private void InitializeScene()
-        {
-            IPolyhedron3D polyhedron = PolyhedronBuilder.CreateCompositePolyhedron(
-                A, B, C,
-                new HomogeneousPoint3D(0, 0, 0, 1),
-                new HomogeneousPoint3D(0, 0, 0, 1));
-            _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -600, 1), polyhedron, 400);
-            _scene.Initialize();
         }
 
         public void Open()
@@ -146,23 +136,16 @@ namespace SdlApplication.Window
                                 _visibleFacetDrawer.EnabledNotVisibleParts = !_visibleFacetDrawer.EnabledNotVisibleParts;
                                 break;
                             case SDL.SDL_Keycode.SDLK_1:
-                                _scene.AddObject(PolyhedronBuilder.CreateSingleSimplePolyhedron(
-                                    A, B, C,
-                                    new HomogeneousPoint3D(0, 0, 0, 1),
-                                    new HomogeneousPoint3D(0, 0, 0, 1)));
+                                _currenPolyhedronType = PolyhedronType.Parallelepiped;
+                                AddObjectToScene();
                                 break;
                             case SDL.SDL_Keycode.SDLK_2:
-                                _scene.AddObject(PolyhedronBuilder.CreateCompositePolyhedron(
-                                    A, B, C,
-                                    new HomogeneousPoint3D(0, 0, 0, 1),
-                                    new HomogeneousPoint3D(0, 0, 0, 1)));
+                                _currenPolyhedronType = PolyhedronType.ParallelepipedWithHole;
+                                AddObjectToScene();
                                 break;
                             case SDL.SDL_Keycode.SDLK_3:
-                                _scene.AddObject(PolyhedronBuilder.CreateManySimplePolyhedrons(
-                                    A, B, C,
-                                    new HomogeneousPoint3D(0, 0, 0, 1),
-                                    new HomogeneousPoint3D(0, 0, 0, 1),
-                                    DistanceBetweenPolyhedrons));
+                                _currenPolyhedronType = PolyhedronType.ManyParallelepipeds;
+                                AddObjectToScene();
                                 break;
                             }
                         break;
@@ -171,6 +154,28 @@ namespace SdlApplication.Window
                 RenderScene();
                 Thread.Sleep(_renderLoopTimeoutMs);
             }
+        }
+
+        private void InitializeScene()
+        {
+
+            IPolyhedron3D polyhedron = PolyhedronBuilder.CreatePolyhedron(
+                _currenPolyhedronType,
+                new HomogeneousPoint3D(0, 0, 0, 1),
+                new HomogeneousPoint3D(0, 0, 0, 1),
+                A);
+            _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -400, 1), polyhedron, 200);
+            _scene.Initialize();
+        }
+
+        private void AddObjectToScene()
+        {
+            _scene.AddObject(
+                PolyhedronBuilder.CreatePolyhedron(
+                    _currenPolyhedronType,
+                    new HomogeneousPoint3D(0, 0, 0, 1),
+                    new HomogeneousPoint3D(0, 0, 0, 1),
+                    A));
         }
 
         // Формат цвета в HEX коде:
