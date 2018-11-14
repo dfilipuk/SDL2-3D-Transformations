@@ -147,6 +147,10 @@ namespace SdlApplication.Window
                                 _currenPolyhedronType = PolyhedronType.ManyParallelepipeds;
                                 AddObjectToScene();
                                 break;
+                            case SDL.SDL_Keycode.SDLK_4:
+                                _currenPolyhedronType = PolyhedronType.Cubes;
+                                AddObjectToScene();
+                                break;
                             }
                         break;
                     }

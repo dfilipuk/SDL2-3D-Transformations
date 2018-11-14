@@ -32,6 +32,11 @@ namespace Open3D.Geometry.Factory
                         geometricCenter,
                         rotationCenter,
                         50);
+                case PolyhedronType.Cubes:
+                    return CreateCubes(
+                        args[0] / 2, args[0] / 2, args[0] / 2,
+                        geometricCenter,
+                        rotationCenter);
                 default:
                     throw new ArgumentException($"No builder for type {type}");
             }
@@ -88,6 +93,42 @@ namespace Open3D.Geometry.Factory
             HomogeneousPoint3D rotationCenter)
         {
             return CreateParallelepipedWithHole(a, b, c, geometricCenter, rotationCenter, 0, false);
+        }
+
+        public static IPolyhedron3D CreateCubes(
+            double a, double b, double c,
+            HomogeneousPoint3D geometricCenter,
+            HomogeneousPoint3D rotationCenter)
+        {
+            var cubes = new List<IPolyhedron3D>
+            {
+                CreateParallelepiped(
+                    a, b, c,
+                    new HomogeneousPoint3D(0, 0, 0, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W),
+                    new [] { 1, 2, 4 }),
+                CreateParallelepiped(
+                    a, b, c,
+                    new HomogeneousPoint3D(a, 0, 0, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W),
+                    new [] { 3 }),
+                CreateParallelepiped(
+                    a, b, c,
+                    new HomogeneousPoint3D(0, 0, c, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W),
+                    new [] { 0 }),
+                CreateParallelepiped(
+                    a, b, c,
+                    new HomogeneousPoint3D(0, -b, 0, 1),
+                    new HomogeneousPoint3D(rotationCenter.X, rotationCenter.Y, rotationCenter.Z, rotationCenter.W),
+                    new [] { 5 }),
+            };
+
+            var result = new CompositePolyhedron3D(rotationCenter, cubes, (0, 0));
+
+            MovePolyhedronGeometricCenter(new HomogeneousPoint3D(a / 2, -b / 2, c / 2, 1), geometricCenter, result);
+
+            return result;
         }
 
         private static IPolyhedron3D CreateParallelepipedWithHole(

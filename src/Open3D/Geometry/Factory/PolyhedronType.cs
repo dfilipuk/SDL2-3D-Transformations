@@ -4,6 +4,7 @@
     {
         Parallelepiped,
         ParallelepipedWithHole,
-        ManyParallelepipeds
+        ManyParallelepipeds,
+        Cubes
     }
 }
