@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geometry\Axis3D.cs" />
     <Compile Include="Geometry\Factory\PolyhedronBuilder.cs" />
     <Compile Include="Geometry\Factory\PolyhedronType.cs" />
     <Compile Include="Geometry\HomogeneousPoint3D.cs" />
@@ -53,7 +54,6 @@
     <Compile Include="Geometry\Polyhedron\Polyhedron3D.cs" />
     <Compile Include="Geometry\Polyhedron\SimplePolyhedron3D.cs" />
     <Compile Include="Math\AffineTransformation.cs" />
-    <Compile Include="Math\Axis3D.cs" />
     <Compile Include="Math\Matrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rendering\IScene.cs" />

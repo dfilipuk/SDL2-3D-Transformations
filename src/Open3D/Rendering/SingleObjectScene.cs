@@ -1,6 +1,5 @@
 ﻿using Open3D.Geometry;
 using Open3D.Geometry.Polyhedron;
-using Open3D.Math;
 
 namespace Open3D.Rendering
 {

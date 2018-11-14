@@ -1,4 +1,4 @@
-﻿namespace Open3D.Math
+﻿namespace Open3D.Geometry
 {
     public enum Axis3D
     {

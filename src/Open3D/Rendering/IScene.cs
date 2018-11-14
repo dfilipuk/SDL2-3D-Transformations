@@ -3,7 +3,6 @@ using System.Drawing;
 using Clipping2D.Drawer;
 using Open3D.Geometry;
 using Open3D.Geometry.Polyhedron;
-using Open3D.Math;
 
 namespace Open3D.Rendering
 {
