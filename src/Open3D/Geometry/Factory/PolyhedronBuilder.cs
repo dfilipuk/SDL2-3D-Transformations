@@ -23,7 +23,7 @@ namespace Open3D.Geometry.Factory
                         rotationCenter);
                 case PolyhedronType.ParallelepipedWithHole:
                     return CreateCompositePolyhedron(
-                        args[0], args[0] / 4.5, args[0],
+                        args[0], args[0], args[0],
                         geometricCenter,
                         rotationCenter);
                 case PolyhedronType.ManyParallelepipeds:

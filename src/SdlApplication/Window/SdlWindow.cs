@@ -164,7 +164,7 @@ namespace SdlApplication.Window
                 new HomogeneousPoint3D(0, 0, 0, 1),
                 new HomogeneousPoint3D(0, 0, 0, 1),
                 A);
-            _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -400, 1), polyhedron, 200);
+            _scene = new SingleObjectScene(new HomogeneousPoint3D(0, 0, -600, 1), polyhedron, 400);
             _scene.Initialize();
         }
 
