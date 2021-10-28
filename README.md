@@ -1,8 +1,8 @@
 # Roberts algorithm and Affine transformations
-![Roberts algorithm and Affine transformations demo](https://raw.githubusercontent.com/Kupilif/SDL2-3D-Transformations/master/Figure1.GIF)
-![Roberts algorithm and Affine transformations demo](https://raw.githubusercontent.com/Kupilif/SDL2-3D-Transformations/master/Figure2.GIF)
-![Roberts algorithm and Affine transformations demo](https://raw.githubusercontent.com/Kupilif/SDL2-3D-Transformations/master/Figure3.GIF)
-![Roberts algorithm and Affine transformations demo](https://raw.githubusercontent.com/Kupilif/SDL2-3D-Transformations/master/Figure4.GIF)
+![Roberts algorithm and Affine transformations demo](./Figure1.GIF)
+![Roberts algorithm and Affine transformations demo](./Figure2.GIF)
+![Roberts algorithm and Affine transformations demo](./Figure3.GIF)
+![Roberts algorithm and Affine transformations demo](./Figure4.GIF)
 ## Control
 - `W, S` — Rotate around OX
 - `A, D` — Rotate around OY
